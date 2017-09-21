@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">Media Monitoring App</string>
 
+    <string name="title_activity_main">Main</string>
+
+
     <!--Values related to Login and Registration with Firebase-->
     <string name="action_sign_in_short">Register</string>
     <string name="email">Email</string>
