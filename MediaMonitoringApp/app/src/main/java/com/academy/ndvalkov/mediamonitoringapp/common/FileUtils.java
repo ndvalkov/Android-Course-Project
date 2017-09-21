@@ -15,7 +15,7 @@ public class FileUtils {
     public static final String APP_MAIN_DIR = "Config";
 
     // application config files
-    public static final String EMAILS_INPUT_FILENAME = "emails_input";
+    public static final String EMAILS_INPUT_FILENAME = "emails_input.txt";
 
     private static FileUtils instance;
 
@@ -54,10 +54,10 @@ public class FileUtils {
         EXTERNAL_STORAGE_PATH = storage.getExternalStorageDirectory();
         INTERNAL_STORAGE_PATH = storage.getInternalFilesDirectory();
         EXTERNAL_MAIN_PATH = EXTERNAL_STORAGE_PATH +
-                File.pathSeparator +
+                File.separator +
                 USER_MAIN_DIR;
         INTERNAL_MAIN_PATH = INTERNAL_STORAGE_PATH +
-                File.pathSeparator +
+                File.separator +
                 APP_MAIN_DIR;
 
         createApplicationDirectories();
@@ -72,16 +72,17 @@ public class FileUtils {
     }
 
     private void createApplicationDirectories() {
-        if (!Storage.isExternalWritable()) {
-            EXTERNAL_MAIN_PATH = INTERNAL_STORAGE_PATH + File.pathSeparator + USER_MAIN_DIR;
-        }
-
         mStorage.createDirectory(EXTERNAL_MAIN_PATH);
         mStorage.createDirectory(INTERNAL_MAIN_PATH);
     }
 
     private void createApplicationFiles() {
-        mStorage.createFile(INTERNAL_MAIN_PATH + File.pathSeparator + EMAILS_INPUT_FILENAME, "");
+        final String pathToEmails = INTERNAL_MAIN_PATH + File.separator + EMAILS_INPUT_FILENAME;
+        if (!mStorage.isFileExist(pathToEmails)) {
+            mStorage.createFile(pathToEmails, "");
+        }
+
+        // next
     }
 
     public void appendToFile(String path, String content) {

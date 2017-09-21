@@ -5,7 +5,9 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.view.MotionEvent;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,13 +16,22 @@ import android.widget.Toast;
 
 import com.academy.ndvalkov.mediamonitoringapp.MainActivity;
 import com.academy.ndvalkov.mediamonitoringapp.R;
+import com.academy.ndvalkov.mediamonitoringapp.common.FileUtils;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.snatik.storage.Storage;
+
+import java.io.File;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 public class LoginActivity extends AppCompatActivity {
+
+    private static final String TAG = LoginActivity.class.getSimpleName();
 
     private EditText inputPassword;
     private FirebaseAuth auth;
@@ -52,11 +63,24 @@ public class LoginActivity extends AppCompatActivity {
         btnLogin = (Button) findViewById(R.id.btn_login);
         btnReset = (Button) findViewById(R.id.btn_reset_password);
 
-//        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-//                android.R.layout.simple_dropdown_item_1line, COUNTRIES);
-//        AutoCompleteTextView textView = (AutoCompleteTextView)
-//                findViewById(R.id.countries_list);
-//        textView.setAdapter(adapter);
+        Storage storage = new Storage(getApplicationContext());
+        FileUtils fileUtils = FileUtils.getInstance(this, storage);
+        String emailHistory = fileUtils.readFileContent(fileUtils.getInternalMainPath() +
+                File.separator +
+                FileUtils.EMAILS_INPUT_FILENAME);
+        String[] emails = emailHistory.split(System.getProperty("line.separator"));
+        List<String> reversed = Arrays.asList(emails);
+        Collections.reverse(reversed);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_dropdown_item_1line, reversed);
+        inputEmail.setAdapter(adapter);
+        inputEmail.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                inputEmail.showDropDown();
+                return false;
+            }
+        });
 
         //Get Firebase auth instance
         auth = FirebaseAuth.getInstance();
@@ -90,6 +114,13 @@ public class LoginActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Enter password!", Toast.LENGTH_SHORT).show();
                     return;
                 }
+
+                // refactor file operations
+                Storage storage = new Storage(getApplicationContext());
+                FileUtils fileUtils = FileUtils.getInstance(LoginActivity.this, storage);
+                fileUtils.appendToFile(fileUtils.getInternalMainPath() +
+                        File.separator +
+                        FileUtils.EMAILS_INPUT_FILENAME, email);
 
                 progressBar.setVisibility(View.VISIBLE);
 
