@@ -26,15 +26,26 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <EditText
+            <AutoCompleteTextView
                 android:id="@+id/email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
                 android:hint="@string/hint_email"
                 android:inputType="textEmailAddress"
-                android:textColor="@android:color/white"
-                android:textColorHint="@android:color/white" />
+                android:textSize="@dimen/font_normal"/>
+
+            <!--<EditText-->
+                <!--android:id="@+id/email"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginBottom="10dp"-->
+                <!--android:hint="@string/hint_email"-->
+                <!--android:inputType="textEmailAddress"-->
+                <!--android:textColor="@android:color/white"-->
+                <!--android:textColorHint="@android:color/white" />-->
+
+
+
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
@@ -56,12 +67,11 @@
 
         <Button
             android:id="@+id/btn_login"
+            style="@style/NormalButton.PrimaryPositiveButton"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dip"
-            android:background="@color/colorAccent"
-            android:text="@string/btn_login"
-            android:textColor="@android:color/black" />
+            android:text="@string/btn_login" />
 
         <Button
             android:id="@+id/btn_reset_password"

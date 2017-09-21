@@ -1,5 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- basic colors -->
+    <color name="green">#27D34D</color>
+    <color name="green_light">#C8E6C9</color>
+    <color name="blue">#2A91BD</color>
+    <color name="blue_light">#00BCD4</color>
+    <color name="orange">#FF9D2F</color>
+    <color name="orange_light">#FFB74D</color>
+    <color name="red">#F44336</color>
+    <color name="skyblue">#87cefa</color>
+
+    <!--translucent colors-->
+    <color name="black_translucent">#54000000</color>
+    <color name="red_translucent">#80ff0000</color>
+    <color name="green_translucent">#8000ff00</color>
+    <color name="green_light_translucent">#80ccffcc</color>
+    <color name="blue_translucent">#800000ff</color>
+    <color name="blue_light_translucent">#8036a5E3</color>
+    <color name="skyblue_translucent">#8087ceeb</color>
+    <color name="skyblue_light_translucent">#8087cefa</color>
+    <color name="orange_translucent">#80ffa500</color>
+    <color name="orange_light_translucent">#80ffbb33</color>
+    <color name="grey_translucent">#80969696</color>
+    <color name="grey_light_translucent">#80d3d3d3</color>
+    <color name="white_translucent">#87ffffff</color>
+
+    <!-- greyscale -->
+    <color name="grey_lighter">#D3D3D3</color>
+    <color name="grey_light">#A7A7A7</color>
+    <color name="grey">#7A7979</color>
+    <color name="black">#323232</color>
+
     <color name="colorPrimary">#00bcd4</color>
     <color name="colorPrimaryDark">#0097a7</color>
     <color name="colorAccent">#f2fe71</color>
