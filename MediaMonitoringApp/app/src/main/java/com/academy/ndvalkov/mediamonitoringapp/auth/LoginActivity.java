@@ -12,7 +12,6 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.academy.ndvalkov.mediamonitoringapp.MainActivity;
 import com.academy.ndvalkov.mediamonitoringapp.R;
@@ -23,6 +22,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.snatik.storage.Storage;
+
+import org.aviran.cookiebar2.CookieBar;
 
 import java.io.File;
 import java.util.Arrays;
@@ -106,12 +107,24 @@ public class LoginActivity extends AppCompatActivity {
                 final String password = inputPassword.getText().toString();
 
                 if (TextUtils.isEmpty(email)) {
-                    Toast.makeText(getApplicationContext(), "Enter email address!", Toast.LENGTH_SHORT).show();
+                    // Toast.makeText(getApplicationContext(), "Enter email address!", Toast.LENGTH_SHORT).show();
+                    CookieBar.Build(LoginActivity.this)
+                            .setMessage("Enter email address!")
+                            .setIcon(R.drawable.ic_notify)
+                            .setIconAnimation(R.animator.iconspin)
+                            .setDuration(2000)
+                            .show();
                     return;
                 }
 
                 if (TextUtils.isEmpty(password)) {
-                    Toast.makeText(getApplicationContext(), "Enter password!", Toast.LENGTH_SHORT).show();
+                    // Toast.makeText(getApplicationContext(), "Enter password!", Toast.LENGTH_SHORT).show();
+                    CookieBar.Build(LoginActivity.this)
+                            .setMessage("Enter password!")
+                            .setIcon(R.drawable.ic_notify)
+                            .setIconAnimation(R.animator.iconspin)
+                            .setDuration(2000)
+                            .show();
                     return;
                 }
 
@@ -138,7 +151,13 @@ public class LoginActivity extends AppCompatActivity {
                                     if (password.length() < 6) {
                                         inputPassword.setError(getString(R.string.minimum_password));
                                     } else {
-                                        Toast.makeText(LoginActivity.this, getString(R.string.auth_failed), Toast.LENGTH_LONG).show();
+                                        CookieBar.Build(LoginActivity.this)
+                                                .setMessage(getString(R.string.auth_failed))
+                                                .setIcon(R.drawable.ic_notify)
+                                                .setIconAnimation(R.animator.iconspin)
+                                                .setDuration(2000)
+                                                .show();
+                                        // Toast.makeText(LoginActivity.this, getString(R.string.auth_failed), Toast.LENGTH_LONG).show();
                                     }
                                 } else {
                                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
