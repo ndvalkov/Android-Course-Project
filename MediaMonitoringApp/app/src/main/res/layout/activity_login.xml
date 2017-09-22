@@ -15,7 +15,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:scaleType="centerCrop"
-            android:src="@drawable/apple" />
+            android:src="@drawable/img_background" />
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -29,7 +29,7 @@
                 android:layout_height="@dimen/logo_w_h"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginBottom="30dp"
-                android:src="@drawable/ic_launcher" />
+                android:src="@drawable/img_logo" />
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
@@ -44,17 +44,6 @@
                     android:inputType="textEmailAddress"
                     android:textColor="@color/white"
                     android:textSize="@dimen/font_large" />
-
-                <!--<EditText-->
-                <!--android:id="@+id/email"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_marginBottom="10dp"-->
-                <!--android:hint="@string/hint_email"-->
-                <!--android:inputType="textEmailAddress"-->
-                <!--android:textColor="@android:color/white"-->
-                <!--android:textColorHint="@android:color/white" />-->
-
 
             </android.support.design.widget.TextInputLayout>
 
