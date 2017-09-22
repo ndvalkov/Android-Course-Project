@@ -16,6 +16,9 @@
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <!--Widget themes-->
+
+
     <!--Buttons-->
     <style name="NormalButton">
         <item name="android:gravity">center_horizontal|center_vertical</item>
@@ -26,6 +29,7 @@
         <item name="android:textSize">@dimen/font_normal</item>
         <item name="android:background">@drawable/shape_button_primary_pos</item>
     </style>
+
 
 
 </resources>
