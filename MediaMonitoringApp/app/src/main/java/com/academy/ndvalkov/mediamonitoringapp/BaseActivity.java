@@ -101,6 +101,30 @@ public abstract class BaseActivity extends AppCompatActivity {
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
+        drawer.addDrawerListener(new DrawerLayout.DrawerListener() {
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+
+            }
+
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                // Toast.makeText(BaseActivity.this, "Entered", Toast.LENGTH_SHORT).show();
+//                TextView tvHeaderTitle = (TextView) drawerView.findViewById(R.id.tv_title_header);
+//                tvHeaderTitle.setPaintFlags(Paint.UNDERLINE_TEXT_FLAG);
+            }
+
+            @Override
+            public void onDrawerClosed(View drawerView) {
+
+            }
+
+            @Override
+            public void onDrawerStateChanged(int newState) {
+
+            }
+        });
+
         mToolbar.setNavigationIcon(R.drawable.ic_nav);
     }
 

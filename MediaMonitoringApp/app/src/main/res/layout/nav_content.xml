@@ -6,15 +6,14 @@
 
     <Button
         android:id="@+id/nav_main"
-        style="@android:style/Widget.Holo.Light.ActionButton"
+        style="@style/NavButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/nav_header_height"
         android:drawableLeft="@drawable/ic_main"
         android:drawableStart="@drawable/ic_main"
         android:onClick="startActivity"
-        android:text="@string/navigation.content.main"
-        android:textSize="@dimen/font_large" />
+        android:text="@string/navigation.content.main" />
 
     <ImageView
         android:layout_width="match_parent"
@@ -23,14 +22,13 @@
 
     <Button
         android:id="@+id/nav_profile"
-        style="@android:style/Widget.Holo.Light.ActionButton"
+        style="@style/NavButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:drawableLeft="@drawable/ic_profile"
         android:drawableStart="@drawable/ic_profile"
         android:onClick="startActivity"
-        android:text="@string/navigation.content.profile"
-        android:textSize="@dimen/font_large" />
+        android:text="@string/navigation.content.profile" />
 
     <ImageView
         android:layout_width="match_parent"

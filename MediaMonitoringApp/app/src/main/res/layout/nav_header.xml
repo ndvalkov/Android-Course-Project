@@ -1,23 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/nav_header"
     android:layout_width="match_parent"
     android:layout_height="@dimen/nav_header_height"
-    android:background="@color/secondaryColor"
+    android:background="@color/secondaryLightColor"
     android:gravity="bottom"
     android:orientation="vertical"
     android:paddingBottom="@dimen/nav_header_vertical_spacing"
     android:paddingLeft="@dimen/nav_header_horizontal_spacing"
     android:paddingRight="@dimen/nav_header_horizontal_spacing"
     android:paddingTop="@dimen/nav_header_vertical_spacing"
-    android:theme="@style/ThemeOverlay.AppCompat.Dark">
+    android:theme="@style/ThemeOverlay.AppCompat.Dark"
+    android:animateLayoutChanges="true">
 
     <TextView
+        android:id="@+id/tv_title_header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:drawableStart="@drawable/ic_notify"
         android:gravity="center"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
         android:text="@string/navigation.header.title"
         android:textSize="@dimen/font_large"
+        android:textColor="@color/white"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
 </LinearLayout>
