@@ -9,6 +9,7 @@
     <color name="orange_light">#FFB74D</color>
     <color name="red">#F44336</color>
     <color name="skyblue">#87cefa</color>
+    <color name="yellow">#FFFF00</color>
 
     <!--translucent colors-->
     <color name="black_translucent">#54000000</color>
@@ -65,8 +66,6 @@
     <color name="btn_login_bg">#eceef1</color>
     <color name="lbl_name">#333333</color>
     <color name="btn_logut_bg">#ff6861</color>
-
-
 
 
 </resources>
