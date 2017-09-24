@@ -1,4 +1,4 @@
-package com.academy.ndvalkov.mediamonitoringapp;
+package com.academy.ndvalkov.mediamonitoringapp.main;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.academy.ndvalkov.mediamonitoringapp.R;
 import com.academy.ndvalkov.mediamonitoringapp.auth.LoginActivity;
 import com.academy.ndvalkov.mediamonitoringapp.auth.SignupActivity;
 import com.google.android.gms.tasks.OnCompleteListener;

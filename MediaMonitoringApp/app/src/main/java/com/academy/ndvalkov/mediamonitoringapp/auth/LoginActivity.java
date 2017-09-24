@@ -13,7 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 
-import com.academy.ndvalkov.mediamonitoringapp.MainActivity;
+import com.academy.ndvalkov.mediamonitoringapp.main.MainActivity;
 import com.academy.ndvalkov.mediamonitoringapp.R;
 import com.academy.ndvalkov.mediamonitoringapp.common.FileUtils;
 import com.academy.ndvalkov.mediamonitoringapp.common.Notifications;
