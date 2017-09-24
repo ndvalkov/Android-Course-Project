@@ -21,6 +21,10 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <style name="AppTheme.RoundedCornerMaterialButton" parent="Widget.AppCompat.Button.Colored">
+        <item name="android:background">@drawable/shape_button_rounded</item>
+    </style>
+
     <!--Widget themes-->
 
     <!--Buttons-->
@@ -29,7 +33,7 @@
     </style>
 
     <style name="NormalButton.PrimaryPositiveButton">
-        <item name="android:textColor">@color/white</item>
+        <item name="android:textColor">@color/secondaryTextColor</item>
         <item name="android:textSize">@dimen/font_normal</item>
         <item name="android:background">@drawable/shape_button_primary_pos</item>
     </style>

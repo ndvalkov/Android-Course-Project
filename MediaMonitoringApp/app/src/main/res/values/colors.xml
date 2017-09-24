@@ -31,9 +31,19 @@
     <color name="grey">#7A7979</color>
     <color name="black">#323232</color>
 
-    <color name="colorPrimary">#00bcd4</color>
-    <color name="colorPrimaryDark">#0097a7</color>
-    <color name="colorAccent">#f2fe71</color>
+    <color name="colorPrimary">@color/primaryColor</color>
+    <color name="colorPrimaryDark">@color/primaryDarkColor</color>
+    <color name="colorAccent">@color/secondaryColor</color>
+
+    <!--app color scheme-->
+    <color name="primaryColor">#009688</color>
+    <color name="primaryLightColor">#52c7b8</color>
+    <color name="primaryDarkColor">#00675b</color>
+    <color name="secondaryColor">#455a64</color>
+    <color name="secondaryLightColor">#718792</color>
+    <color name="secondaryDarkColor">#1c313a</color>
+    <color name="primaryTextColor">#000000</color>
+    <color name="secondaryTextColor">#ffffff</color>
 
     <!--Cookiebar sample colors-->
     <color name="fancyTitle">#ffff00</color>
