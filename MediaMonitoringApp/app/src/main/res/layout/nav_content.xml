@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <Button
+        android:id="@+id/nav_main"
+        style="@android:style/Widget.Holo.Light.ActionButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/nav_header_height"
+        android:drawableLeft="@drawable/ic_main"
+        android:drawableStart="@drawable/ic_main"
+        android:onClick="startActivity"
+        android:text="@string/navigation.content.main"
+        android:textSize="@dimen/font_large" />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/shape_divider_horizontal" />
+
+    <Button
+        android:id="@+id/nav_profile"
+        style="@android:style/Widget.Holo.Light.ActionButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/ic_profile"
+        android:drawableStart="@drawable/ic_profile"
+        android:onClick="startActivity"
+        android:text="@string/navigation.content.profile"
+        android:textSize="@dimen/font_large" />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/shape_divider_horizontal" />
+
+</LinearLayout>

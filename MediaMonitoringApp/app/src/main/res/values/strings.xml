@@ -8,7 +8,6 @@
     <string name="title_activity_reset_password">ResetPassword</string>
     <string name="title_activity_login">Sign in</string>
 
-
     <!--Values related to Login and Registration with Firebase-->
     <string name="action_sign_in_short">Register</string>
     <string name="email">Email</string>
@@ -43,6 +42,15 @@
     <string name="button.ignore">Ignore</string>
     <string name="button.yes">Yes</string>
     <string name="button.no">No</string>
+
+    <!--Nav drawer-->
+    <string name="navigation.action.open">Open navigation drawer</string>
+    <string name="navigation.action.close">Close navigation drawer</string>
+    <string name="navigation.header.title">Media Monitor</string>
+    <string name="navigation.content.main">Main</string>
+    <string name="navigation.content.articles">Articles</string>
+    <string name="navigation.content.monitor">Monitor</string>
+    <string name="navigation.content.profile">Profile</string>
 
     <!--Messages-->
     <string name="msg_app_exit">Are you sure you want to exit?</string>

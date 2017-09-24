@@ -100,13 +100,13 @@ public class BaseActivity extends AppCompatActivity {
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        mToolbar.setNavigationIcon(R.drawable.xh_ic_nav);
+        mToolbar.setNavigationIcon(R.drawable.ic_nav);
     }
 
     public void startActivity(View v) {
         isActivityStarted = true;
         switch (v.getId()) {
-            case R.id.main:
+            case R.id.nav_main:
                 new DelayActivityTransitionAsyncTask(MainActivity.class).execute();
                 break;
 //            case R.id.articles:
@@ -123,10 +123,8 @@ public class BaseActivity extends AppCompatActivity {
 
     protected void setCustomToolbarTitle(int resId) {
         if (mToolbar != null) {
-            ((TextView) mToolbar.findViewById(R.id.)).setText(resId);
+            ((TextView) mToolbar.findViewById(R.id.title_main)).setText(resId);
         }
-
-
     }
 
     /**
@@ -171,6 +169,7 @@ public class BaseActivity extends AppCompatActivity {
 //                overridePendingTransition(R.animator.enter, R.animator.exit);
 //                finish();
 //            }
+            }
         }
     }
 
@@ -195,7 +194,7 @@ public class BaseActivity extends AppCompatActivity {
                     // permission was granted ...
                 } else {
                     DialogFactory.DialogParams dlgParams = new DialogFactory.DialogParams();
-                    dlgParams.setTitle()
+                    dlgParams.setTitle("Warning")
                             .setIcon(this.getResources().getDrawable(android.R.drawable.stat_sys_warning))
                             .setContent("This application needs read/write permissions to operate with local files.")
                             .setOKButton(true);
