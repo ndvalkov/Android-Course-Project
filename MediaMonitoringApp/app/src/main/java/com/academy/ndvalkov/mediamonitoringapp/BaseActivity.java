@@ -20,10 +20,11 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import com.academy.ndvalkov.mediamonitoringapp.auth.ProfileActivity;
 import com.academy.ndvalkov.mediamonitoringapp.common.DialogFactory;
 import com.academy.ndvalkov.mediamonitoringapp.main.MainActivity;
 
-public class BaseActivity extends AppCompatActivity {
+public abstract class BaseActivity extends AppCompatActivity {
     private static final String TAG = BaseActivity.class.getSimpleName();
 
     private static final int PERMISSIONS_REQUEST_WRITE_EXTERNAL = 10523;
@@ -109,6 +110,10 @@ public class BaseActivity extends AppCompatActivity {
             case R.id.nav_main:
                 new DelayActivityTransitionAsyncTask(MainActivity.class).execute();
                 break;
+            case R.id.nav_profile:
+                new DelayActivityTransitionAsyncTask(ProfileActivity.class).execute();
+                break;
+
 //            case R.id.articles:
 //                new DelayActivityTransitionAsyncTask(ArticlesActivity.class).execute();
 //                break;
@@ -169,11 +174,15 @@ public class BaseActivity extends AppCompatActivity {
 //                overridePendingTransition(R.animator.enter, R.animator.exit);
 //                finish();
 //            }
+            } else if (selectedActivity.equals(ProfileActivity.class)) {
+                startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
+                overridePendingTransition(R.animator.enter, R.animator.exit);
+                finish();
             }
         }
     }
 
-    public boolean isLargeScreen() {
+    protected boolean isLargeScreen() {
         if ((getResources().getConfiguration().screenLayout &
                 Configuration.SCREENLAYOUT_SIZE_MASK) ==
                 Configuration.SCREENLAYOUT_SIZE_LARGE) {
