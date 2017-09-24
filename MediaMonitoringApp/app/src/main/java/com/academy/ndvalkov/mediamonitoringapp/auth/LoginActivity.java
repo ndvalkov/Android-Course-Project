@@ -16,14 +16,13 @@ import android.widget.ProgressBar;
 import com.academy.ndvalkov.mediamonitoringapp.MainActivity;
 import com.academy.ndvalkov.mediamonitoringapp.R;
 import com.academy.ndvalkov.mediamonitoringapp.common.FileUtils;
+import com.academy.ndvalkov.mediamonitoringapp.common.Notifications;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.snatik.storage.Storage;
-
-import org.aviran.cookiebar2.CookieBar;
 
 import java.io.File;
 import java.util.Arrays;
@@ -64,16 +63,9 @@ public class LoginActivity extends AppCompatActivity {
         btnLogin = (Button) findViewById(R.id.btn_login);
         btnReset = (Button) findViewById(R.id.btn_reset_password);
 
-        Storage storage = new Storage(getApplicationContext());
-        FileUtils fileUtils = FileUtils.getInstance(this, storage);
-        String emailHistory = fileUtils.readFileContent(fileUtils.getInternalMainPath() +
-                File.separator +
-                FileUtils.EMAILS_INPUT_FILENAME);
-        String[] emails = emailHistory.split(System.getProperty("line.separator"));
-        List<String> reversed = Arrays.asList(emails);
-        Collections.reverse(reversed);
+        List<String> history = getEmailHistory();
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_dropdown_item_1line, reversed);
+                android.R.layout.simple_dropdown_item_1line, history);
         inputEmail.setAdapter(adapter);
         inputEmail.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -103,37 +95,18 @@ public class LoginActivity extends AppCompatActivity {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String email = inputEmail.getText().toString();
+                final String email = inputEmail.getText().toString();
                 final String password = inputPassword.getText().toString();
 
                 if (TextUtils.isEmpty(email)) {
-                    // Toast.makeText(getApplicationContext(), "Enter email address!", Toast.LENGTH_SHORT).show();
-                    CookieBar.Build(LoginActivity.this)
-                            .setMessage("Enter email address!")
-                            .setIcon(R.drawable.ic_notify)
-                            .setIconAnimation(R.animator.iconspin)
-                            .setDuration(2000)
-                            .show();
+                    Notifications.showPositive(LoginActivity.this, "Enter email address!");
                     return;
                 }
 
                 if (TextUtils.isEmpty(password)) {
-                    // Toast.makeText(getApplicationContext(), "Enter password!", Toast.LENGTH_SHORT).show();
-                    CookieBar.Build(LoginActivity.this)
-                            .setMessage("Enter password!")
-                            .setIcon(R.drawable.ic_notify)
-                            .setIconAnimation(R.animator.iconspin)
-                            .setDuration(2000)
-                            .show();
+                    Notifications.showPositive(LoginActivity.this, "Enter password!");
                     return;
                 }
-
-                // refactor file operations
-                Storage storage = new Storage(getApplicationContext());
-                FileUtils fileUtils = FileUtils.getInstance(LoginActivity.this, storage);
-                fileUtils.appendToFile(fileUtils.getInternalMainPath() +
-                        File.separator +
-                        FileUtils.EMAILS_INPUT_FILENAME, email);
 
                 progressBar.setVisibility(View.VISIBLE);
 
@@ -151,15 +124,10 @@ public class LoginActivity extends AppCompatActivity {
                                     if (password.length() < 6) {
                                         inputPassword.setError(getString(R.string.minimum_password));
                                     } else {
-                                        CookieBar.Build(LoginActivity.this)
-                                                .setMessage(getString(R.string.auth_failed))
-                                                .setIcon(R.drawable.ic_notify)
-                                                .setIconAnimation(R.animator.iconspin)
-                                                .setDuration(2000)
-                                                .show();
-                                        // Toast.makeText(LoginActivity.this, getString(R.string.auth_failed), Toast.LENGTH_LONG).show();
+                                        Notifications.showPositive(LoginActivity.this, getString(R.string.auth_failed));
                                     }
                                 } else {
+                                    saveEmailHistory(email);
                                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                     startActivity(intent);
                                     finish();
@@ -168,5 +136,26 @@ public class LoginActivity extends AppCompatActivity {
                         });
             }
         });
+    }
+
+    private void saveEmailHistory(String email) {
+        Storage storage = new Storage(getApplicationContext());
+        FileUtils fileUtils = FileUtils.getInstance(LoginActivity.this, storage);
+        fileUtils.appendToFile(fileUtils.getInternalMainPath() +
+                File.separator +
+                FileUtils.EMAILS_INPUT_FILENAME, email);
+    }
+
+    @NonNull
+    private List<String> getEmailHistory() {
+        Storage storage = new Storage(this);
+        FileUtils fileUtils = FileUtils.getInstance(this, storage);
+        String emailHistory = fileUtils.readFileContent(fileUtils.getInternalMainPath() +
+                File.separator +
+                FileUtils.EMAILS_INPUT_FILENAME);
+        String[] emails = emailHistory.split(System.getProperty("line.separator"));
+        List<String> reversed = Arrays.asList(emails);
+        Collections.reverse(reversed);
+        return reversed;
     }
 }
