@@ -13,8 +13,6 @@ import com.academy.ndvalkov.mediamonitoringapp.R;
 import com.academy.ndvalkov.mediamonitoringapp.common.Notifications;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 public class ProfileActivity extends BaseActivity {
 
@@ -23,37 +21,12 @@ public class ProfileActivity extends BaseActivity {
 
     private EditText oldEmail, newEmail, password, newPassword;
     private ProgressBar progressBar;
-    private FirebaseAuth.AuthStateListener authListener;
-    private FirebaseAuth auth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
         setupDrawerNavigation();
-//        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-//        toolbar.setTitle(getString(R.string.title_activity_profile));
-//        setSupportActionBar(toolbar);
-
-        //get firebase auth instance
-        auth = FirebaseAuth.getInstance();
-
-        //get current user
-        final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-
-        authListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-                if (user == null) {
-                    // user auth state is changed - user is null
-                    // launch login activity
-                    startActivity(new Intent(ProfileActivity.this, LoginActivity.class));
-                    finish();
-                }
-            }
-        };
-
         initializeViewElements();
 
         btnChangeEmail.setOnClickListener(new View.OnClickListener() {
@@ -246,7 +219,6 @@ public class ProfileActivity extends BaseActivity {
         }
     }
 
-    //sign out method
     public void signOut() {
         auth.signOut();
     }

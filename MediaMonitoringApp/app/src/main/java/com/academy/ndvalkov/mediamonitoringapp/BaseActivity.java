@@ -20,11 +20,15 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import com.academy.ndvalkov.mediamonitoringapp.auth.LoginActivity;
 import com.academy.ndvalkov.mediamonitoringapp.auth.ProfileActivity;
 import com.academy.ndvalkov.mediamonitoringapp.common.DialogFactory;
 import com.academy.ndvalkov.mediamonitoringapp.main.MainActivity;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public abstract class BaseActivity extends AppCompatActivity {
+
     private static final String TAG = BaseActivity.class.getSimpleName();
 
     private static final int PERMISSIONS_REQUEST_WRITE_EXTERNAL = 10523;
@@ -32,6 +36,22 @@ public abstract class BaseActivity extends AppCompatActivity {
     public static boolean isActivityStarted;
 
     protected Toolbar mToolbar;
+
+    protected FirebaseAuth auth;
+    protected FirebaseUser user;
+
+    protected FirebaseAuth.AuthStateListener authListener  = new FirebaseAuth.AuthStateListener() {
+        @Override
+        public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+            user = firebaseAuth.getCurrentUser();
+            if (user == null) {
+                // user auth state is changed - user is null
+                // launch login activity
+                startActivity(new Intent(BaseActivity.this, LoginActivity.class));
+                finish();
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +62,11 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
 
         super.onCreate(savedInstanceState);
+
+        //get firebase auth instance
+        auth = FirebaseAuth.getInstance();
+        //get current user
+        user = auth.getCurrentUser();
 
         if (Build.VERSION.SDK_INT >= 23) {
             if (checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
@@ -58,6 +83,20 @@ public abstract class BaseActivity extends AppCompatActivity {
             // Permission is automatically granted on sdk<23 upon installation.
 
 
+        }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        auth.addAuthStateListener(authListener);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (authListener != null) {
+            auth.removeAuthStateListener(authListener);
         }
     }
 
