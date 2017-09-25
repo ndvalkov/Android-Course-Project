@@ -55,4 +55,10 @@
     <!--Messages-->
     <string name="msg_app_exit">Are you sure you want to exit?</string>
 
+    <!--Models-->
+    <string name="md_source_name">Name</string>
+    <string name="md_source_description">Description</string>
+    <string name="md_source_url">Url</string>
+    <string name="md_source_category">Category</string>
+
 </resources>

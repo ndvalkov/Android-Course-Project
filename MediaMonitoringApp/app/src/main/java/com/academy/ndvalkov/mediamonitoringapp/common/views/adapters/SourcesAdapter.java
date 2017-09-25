@@ -2,6 +2,8 @@ package com.academy.ndvalkov.mediamonitoringapp.common.views.adapters;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.text.Html;
+import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,8 +37,19 @@ public class SourcesAdapter extends ArrayAdapter<NewsSource> {
         tvName.setText(newsSource.getName());
         tvDescription.setText(newsSource.getDescription());
         tvCategory.setText(newsSource.getCategory());
-        tvUrl.setText(newsSource.getUrl());
+        tvUrl.setText(fromHtml(newsSource.getUrl()));
 
         return convertView;
+    }
+
+    @SuppressWarnings("deprecation")
+    public static Spanned fromHtml(String html){
+        Spanned result;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+            result = Html.fromHtml(html,Html.FROM_HTML_MODE_LEGACY);
+        } else {
+            result = Html.fromHtml(html);
+        }
+        return result;
     }
 }

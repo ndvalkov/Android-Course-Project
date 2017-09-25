@@ -1,6 +1,5 @@
 package com.academy.ndvalkov.mediamonitoringapp.models;
 
-
 import java.io.Serializable;
 
 public class NewsSource implements Serializable {
