@@ -7,8 +7,12 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 
 import com.academy.ndvalkov.mediamonitoringapp.BaseActivity;
 import com.academy.ndvalkov.mediamonitoringapp.R;
@@ -22,7 +26,9 @@ import com.academy.ndvalkov.mediamonitoringapp.models.NewsSource;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class MainActivity extends BaseActivity {
 //    private ArrayList<NewsSource> sources;
@@ -128,8 +134,31 @@ public class MainActivity extends BaseActivity {
     }
 
     private void openFilterDialog() {
+        Set<String> categories = new HashSet<>();
+        for (NewsSource source : sources) {
+            if (!categories.contains(source.getCategory())) {
+                categories.add(source.getCategory());
+            }
+        }
+
         LayoutInflater inflater = getLayoutInflater();
-        View contentView = inflater.inflate(R.layout.dialog_filter, null, false);
+        final LinearLayout contentView = (LinearLayout)inflater.inflate(R.layout.dialog_filter, null, false);
+        final AutoCompleteTextView ac = (AutoCompleteTextView) contentView.findViewById(R.id.acCategory);
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_dropdown_item_1line, new ArrayList<>(categories));
+        ac.setAdapter(adapter);
+        ac.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                ac.showDropDown();
+                return false;
+            }
+        });
+
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT, 1f);
+        contentView.setLayoutParams(params);
 
         DialogFactory.DialogParams dlgParams = new DialogFactory.DialogParams();
         dlgParams.setTitle(getString(R.string.dialog_title_filter))

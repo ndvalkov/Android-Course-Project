@@ -1,5 +1,26 @@
 package com.academy.ndvalkov.mediamonitoringapp.common;
 
+/**
+ * Utility class for the creation of different types of Dialogs.
+ * Sample usage --> (apply Otto annotations to pass data between the Dialog and Activity/worker threads):
+ * -> {@code
+ * DialogFactory.DialogParams dlgParams = new DialogFactory.DialogParams();
+ * dlgParams.setTitle("Information")
+ * .setIcon(getResources().getDrawable(R.drawable.fire_smoke))
+ * .setContent("Some content")
+ * .setIgnoreButton(true)
+ * .setCancelButton(true);
+ * final Dialog dlg = DialogFactory.getInstance(this).createDialog(dlgParams);
+ * dlg.findViewById(R.id.okButton).setOnClickListener(new View.OnClickListener() {
+ *
+ * @Override
+ * public void onClick(View v) {
+ * dlg.dismiss();
+ * }
+ * });
+ * } <-
+ */
+
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
@@ -9,7 +30,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.academy.ndvalkov.mediamonitoringapp.R;
@@ -67,7 +88,7 @@ public class DialogFactory {
         /**
          * Set the Dialog message.
          */
-        TextView messageView = (TextView) contentView.findViewById(R.id.dialogContent);
+        TextView messageView = (TextView) contentView.findViewById(R.id.tvContent);
 
         String content = params.getContent();
         if (content == null || TextUtils.isEmpty(content)) {
@@ -79,11 +100,11 @@ public class DialogFactory {
         // if a Widget/View is present among the parameters, replace the msg TextView with it
         View contentWidget = params.getContentWidget();
         if (contentWidget != null) {
-            RelativeLayout contView = ((RelativeLayout) contentView);
+            LinearLayout contView = ((LinearLayout) contentView.findViewById(R.id.dialogContent));
             int msgId = messageView.getId();
             contView.removeView(messageView);
             contentWidget.setId(msgId);
-            contView.addView(contentWidget, 0);
+            contView.addView(contentWidget);
         }
 
         // add the content View container to the builder
