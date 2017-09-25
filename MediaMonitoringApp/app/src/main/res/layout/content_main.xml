@@ -12,10 +12,9 @@
     tools:context=".main.MainActivity"
     tools:showIn="@layout/app_bar_main">
 
-    <TextView
+    <ListView
+        android:id="@+id/lvSources"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="This is the MAIN"
-        android:textSize="30sp"/>
+        android:layout_height="wrap_content"></ListView>
 
 </RelativeLayout>
