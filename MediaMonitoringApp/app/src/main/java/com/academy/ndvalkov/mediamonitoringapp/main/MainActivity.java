@@ -46,7 +46,7 @@ public class MainActivity extends BaseActivity {
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        mRecyclerView.addItemDecoration(new VerticalSpacingDecoration((int)getResources().getDimension(R.dimen.spacing_large)));
+        mRecyclerView.addItemDecoration(new VerticalSpacingDecoration((int)getResources().getDimension(R.dimen.activity_vertical_margin)));
 
         sources = new ArrayList<>();
         // specify an adapter (see also next example)
