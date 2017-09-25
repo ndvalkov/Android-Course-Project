@@ -14,7 +14,6 @@
         tools:layout_alignParentEnd="true"
         tools:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
         android:text="@string/title_activity_main"
         android:textColor="@color/secondaryTextColor"
         android:textSize="@dimen/font_normal"
@@ -22,5 +21,14 @@
         android:textAllCaps="true" />
 
     <!--Image Buttons here-->
+    <ImageButton
+        android:id="@+id/action_filter"
+        style="@android:style/Widget.Holo.Button.Borderless"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:src="@drawable/ic_filter"/>
 
 </RelativeLayout>

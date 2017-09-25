@@ -17,20 +17,20 @@
         android:textSize="@dimen/font_normal"
         android:textColor="@color/black"/>
 
-    <ImageView
-        android:id="@+id/divider"
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:layout_below="@+id/dialogContent"
-        android:layout_marginTop="@dimen/spacing_tiny"
-        android:layout_marginStart="@dimen/spacing_tiny"
-        android:layout_marginEnd="@dimen/spacing_tiny"
-        android:background="@color/blue_light" />
+    <!--<ImageView-->
+        <!--android:id="@+id/divider"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="2dp"-->
+        <!--android:layout_below="@+id/dialogContent"-->
+        <!--android:layout_marginTop="@dimen/spacing_tiny"-->
+        <!--android:layout_marginStart="@dimen/spacing_tiny"-->
+        <!--android:layout_marginEnd="@dimen/spacing_tiny"-->
+        <!--android:background="@color/secondaryLightColor" />-->
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/divider"
+        android:layout_below="@+id/dialogContent"
         android:paddingEnd="@dimen/spacing_tiny"
         android:paddingBottom="@dimen/spacing_tiny"
         android:layout_marginTop="@dimen/spacing_tiny"
@@ -78,7 +78,7 @@
 
         <Button
             android:id="@+id/okButton"
-            style="@style/NormalButton.PrimaryPositiveButton"
+            style="@style/NormalButton.SecondaryButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"

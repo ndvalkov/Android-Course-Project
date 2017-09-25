@@ -1,13 +1,18 @@
 package com.academy.ndvalkov.mediamonitoringapp.main;
 
+import android.app.Dialog;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ImageButton;
 
 import com.academy.ndvalkov.mediamonitoringapp.BaseActivity;
 import com.academy.ndvalkov.mediamonitoringapp.R;
+import com.academy.ndvalkov.mediamonitoringapp.common.DialogFactory;
 import com.academy.ndvalkov.mediamonitoringapp.common.Notifications;
 import com.academy.ndvalkov.mediamonitoringapp.common.views.adapters.SourcesRVAdapter;
 import com.academy.ndvalkov.mediamonitoringapp.data.services.DataService;
@@ -29,12 +34,31 @@ public class MainActivity extends BaseActivity {
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
 
+    private View.OnClickListener toolbarButtonListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()) {
+                case R.id.action_filter:
+                    openFilterDialog();
+                    break;
+                default:
+                    break;
+            }
+        }
+    };
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setupDrawerNavigation();
 
+        /**
+         * Toolbar action buttons.
+         */
+        ImageButton filterButton = (ImageButton) findViewById(R.id.action_filter);
+        filterButton.setOnClickListener(toolbarButtonListener);
 
         mRecyclerView = (RecyclerView) findViewById(R.id.rvSources);
 
@@ -46,7 +70,7 @@ public class MainActivity extends BaseActivity {
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        mRecyclerView.addItemDecoration(new VerticalSpacingDecoration((int)getResources().getDimension(R.dimen.activity_vertical_margin)));
+        mRecyclerView.addItemDecoration(new VerticalSpacingDecoration((int) getResources().getDimension(R.dimen.activity_vertical_margin)));
 
         sources = new ArrayList<>();
         // specify an adapter (see also next example)
@@ -101,6 +125,24 @@ public class MainActivity extends BaseActivity {
 //        });
 
 
+    }
+
+    private void openFilterDialog() {
+        LayoutInflater inflater = getLayoutInflater();
+        View contentView = inflater.inflate(R.layout.dialog_filter, null, false);
+
+        DialogFactory.DialogParams dlgParams = new DialogFactory.DialogParams();
+        dlgParams.setTitle(getString(R.string.dialog_title_filter))
+                .setIcon(ContextCompat.getDrawable(this, R.drawable.ic_notify))
+                .setContentWidget(contentView)
+                .setOKButton(true);
+        final Dialog dlg = new DialogFactory(this).createDialog(dlgParams);
+        dlg.findViewById(R.id.okButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dlg.dismiss();
+            }
+        });
     }
 
     public class VerticalSpacingDecoration extends RecyclerView.ItemDecoration {
