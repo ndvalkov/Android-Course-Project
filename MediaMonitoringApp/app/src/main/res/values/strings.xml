@@ -64,7 +64,7 @@
     <!--Dialogs-->
     <string name="dialog_title_filter">Filter</string>
     <string name="dialog_filter_category">by Category:</string>
-    <string name="dialog_filter_name">by Name:</string>
+    <string name="dialog_filter_name">News Source:</string>
     <string name="dialog_filter_hint_category">category</string>
     <string name="dialog_filter_hint_name">name</string>
 
