@@ -17,6 +17,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 
 import com.academy.ndvalkov.mediamonitoringapp.R;
 import com.academy.ndvalkov.mediamonitoringapp.common.BusProvider;
@@ -25,7 +26,6 @@ import com.academy.ndvalkov.mediamonitoringapp.common.ListUtils;
 import com.academy.ndvalkov.mediamonitoringapp.common.Notifications;
 import com.academy.ndvalkov.mediamonitoringapp.common.events.FilterActionActivateEvent;
 import com.academy.ndvalkov.mediamonitoringapp.common.events.FilterOpenEvent;
-import com.academy.ndvalkov.mediamonitoringapp.common.fragments.LoadingFragment;
 import com.academy.ndvalkov.mediamonitoringapp.common.views.adapters.SourcesRVAdapter;
 import com.academy.ndvalkov.mediamonitoringapp.data.services.DataService;
 import com.academy.ndvalkov.mediamonitoringapp.data.services.HttpDataService;
@@ -39,6 +39,8 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import fr.castorflex.android.circularprogressbar.CircularProgressBar;
 
 public class SourcesFragment extends Fragment {
 
@@ -87,12 +89,15 @@ public class SourcesFragment extends Fragment {
         mAdapter = new SourcesRVAdapter(sources);
         mRecyclerView.setAdapter(mAdapter);
 
-        final LoadingFragment loadingFragment = LoadingFragment.create(this.getContext());
-        this.getFragmentManager()
-                .beginTransaction()
-                .add(loadingFragment, "fragment_loading")
-                .commit();
-        loadingFragment.show();
+//        final LoadingFragment loadingFragment = LoadingFragment.create(getContext());
+//        getChildFragmentManager()
+//                .beginTransaction()
+//                .add(loadingFragment, "fragment_loading")
+//                .commit();
+//        loadingFragment.show();
+
+        final ProgressBar progress = (CircularProgressBar) view.findViewById(R.id.progress);
+        progress.setVisibility(View.VISIBLE);
 
         DataService<NewsSource> sourcesData = new HttpDataService<>("https://newsapi.org/v1/sources?language=en", NewsSource.class, NewsSource[].class);
         sourcesData.getAll(new HttpTask.OnHttpTaskResult<NewsSource[]>() {
@@ -116,7 +121,8 @@ public class SourcesFragment extends Fragment {
                                 }
                             }, 100);
 
-                            loadingFragment.hide();
+                            progress.setVisibility(View.GONE);
+                            // loadingFragment.hide();
                         }
                     }
                 });
