@@ -1,23 +1,23 @@
 package com.academy.ndvalkov.mediamonitoringapp.main;
 
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
+import android.widget.Toast;
 
 import com.academy.ndvalkov.mediamonitoringapp.R;
 import com.academy.ndvalkov.mediamonitoringapp.common.BusProvider;
+import com.academy.ndvalkov.mediamonitoringapp.common.ListUtils;
 import com.academy.ndvalkov.mediamonitoringapp.models.Keyword;
 import com.yalantis.beamazingtoday.interfaces.AnimationType;
 import com.yalantis.beamazingtoday.interfaces.BatModel;
 import com.yalantis.beamazingtoday.listeners.BatListener;
+import com.yalantis.beamazingtoday.listeners.OnItemClickListener;
 import com.yalantis.beamazingtoday.ui.adapter.BatAdapter;
 import com.yalantis.beamazingtoday.ui.animator.BatItemAnimator;
 import com.yalantis.beamazingtoday.ui.callback.BatCallback;
@@ -26,58 +26,20 @@ import com.yalantis.beamazingtoday.ui.widget.BatRecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PrimaryFragment extends Fragment {
+public class PrimaryFragment extends Fragment implements BatListener, OnItemClickListener {
 
     private static final String TAG = PrimaryFragment.class.getSimpleName();
 
-    private static final int SWIPE_RIGHT = 8;
-
     private BatRecyclerView mRecyclerView;
-    private ArrayList<BatModel> mKeywords = new ArrayList<>();
-    private BatItemAnimator mAnimator = new BatItemAnimator();
-
-    private BatListener mListener = new BatListener() {
-        @Override
-        public void add(String string) {
-            mKeywords.add(0, new Keyword(string));
-            mBatAdapter.notify(AnimationType.ADD, 0);
-        }
-
-        @Override
-        public void delete(int position) {
-            mKeywords.remove(position);
-            mBatAdapter.notify(AnimationType.REMOVE, position);
-        }
-
-        @Override
-        public void move(int from, int to) {
-            if (from >= 0 && to >= 0) {
-
-                // if you use 'BatItemAnimator'
-                mAnimator.setPosition(to);
-
-                BatModel model = mKeywords.get(from);
-                mKeywords.remove(model);
-                mKeywords.add(to, model);
-                mBatAdapter.notify(AnimationType.MOVE, from, to);
-
-                if (from == 0 || to == 0) {
-                    mRecyclerView.getView().scrollToPosition(Math.min(from, to));
-                }
-
-                // Added
-                mRecyclerView.getView().scrollToPosition(Math.max(from, to));
-            }
-        }
-    };
-
-    private BatAdapter mBatAdapter = new BatAdapter(mKeywords, mListener, mAnimator);
+    private BatAdapter mAdapter;
+    private List<BatModel> mKeywords;
+    private BatItemAnimator mAnimator;
 
     public BatRecyclerView getRecyclerView() {
         return mRecyclerView;
     }
 
-    public ArrayList<BatModel> getKeywords() {
+    public List<BatModel> getKeywords() {
         return mKeywords;
     }
 
@@ -100,12 +62,32 @@ public class PrimaryFragment extends Fragment {
         // Register for events from other classes and threads
         BusProvider.getInstance().register(this);
 
+        FloatingActionButton fabDelete = (FloatingActionButton) view.findViewById(R.id.fabDelete);
+        fabDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ListUtils.filter(mKeywords, new ListUtils.Filter<BatModel>() {
+                    @Override
+                    public boolean keepItem(BatModel item) {
+                        return !item.isChecked();
+                    }
+                });
+
+                mAdapter.notifyDataSetChanged();
+            }
+        });
+
         mRecyclerView = (BatRecyclerView) view.findViewById(R.id.batRvSecondary);
+        mAnimator = new BatItemAnimator();
+
         mRecyclerView.getView().setLayoutManager(new LinearLayoutManager(getActivity()));
-        mRecyclerView.getView().setAdapter(mBatAdapter);
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new SwipeBatCallback(mListener));
+        mRecyclerView.getView().setAdapter(mAdapter = new BatAdapter(mKeywords = new ArrayList<>(), this, mAnimator)
+                .setOnItemClickListener(this));
+
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new BatCallback(this));
         itemTouchHelper.attachToRecyclerView(mRecyclerView.getView());
-        mRecyclerView.setAddItemListener(mListener);
+        mRecyclerView.getView().setItemAnimator(mAnimator);
+        mRecyclerView.setAddItemListener(this);
 
         return view;
     }
@@ -121,38 +103,35 @@ public class PrimaryFragment extends Fragment {
         }
     }
 
-    public class SwipeBatCallback extends BatCallback {
+    @Override
+    public void add(String string) {
+        mKeywords.add(0, new Keyword(string));
+        mAdapter.notify(AnimationType.ADD, 0);
+    }
 
-        public SwipeBatCallback(BatListener listener) {
-            super(listener);
-        }
+    @Override
+    public void delete(int position) {
+        mKeywords.remove(position);
+        mAdapter.notify(AnimationType.REMOVE, position);
+    }
 
-        @Override
-        public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-            super.onSwiped(viewHolder, direction);
+    @Override
+    public void move(int from, int to) {
+        if (from >= 0 && to >= 0) {
+            mAnimator.setPosition(to);
+            BatModel model = mKeywords.get(from);
+            mKeywords.remove(model);
+            mKeywords.add(to, model);
+            mAdapter.notify(AnimationType.MOVE, from, to);
 
-            if (direction == SWIPE_RIGHT) {
-                if (mKeywords.isEmpty()) {
-                    return;
-                }
-
-                final View itemView = viewHolder.itemView;
-                final RelativeLayout container = (RelativeLayout) ((FrameLayout) itemView)
-                        .getChildAt(0);
-                final TextView textView = (TextView) container.getChildAt(2);
-
-                String swipedKeyword = textView.getText().toString();
-
-                List<BatModel> kws = new ArrayList<>(mKeywords);
-                for (BatModel batModel: kws) {
-                    if (batModel.getText().equals(swipedKeyword)) {
-                        mKeywords.remove(batModel);
-                        break;
-                    }
-                }
-
-                mBatAdapter.notifyDataSetChanged();
+            if (from == 0 || to == 0) {
+                mRecyclerView.getView().scrollToPosition(Math.min(from, to));
             }
         }
+    }
+
+    @Override
+    public void onClick(BatModel item, int position) {
+        Toast.makeText(getActivity(), item.getText(), Toast.LENGTH_SHORT).show();
     }
 }

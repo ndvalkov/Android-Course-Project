@@ -1,17 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <com.yalantis.beamazingtoday.ui.widget.BatRecyclerView xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/batRvSecondary"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:add_button_color="@drawable/selector_button_add"
-        app:divider_color="@color/secondaryColor"
+        app:divider_color="@color/secondaryLightColor"
         app:hint="Add Primary Keyword"
         app:list_background="@color/white_translucent"
         app:radio_button_res="@drawable/selector_radio_button" />
 
-</LinearLayout>
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fabDelete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:src="@drawable/ic_delete"
+        app:rippleColor="@color/secondaryLightColor"
+        android:clickable="true"
+        android:layout_margin="16dp"/>
+
+</RelativeLayout>
