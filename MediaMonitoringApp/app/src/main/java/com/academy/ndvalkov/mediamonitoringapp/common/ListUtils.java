@@ -15,6 +15,10 @@ public class ListUtils {
         T2 mapItem(T1 item);
     }
 
+    public interface Any<T>{
+        boolean haveItem(T item);
+    }
+
     public static <T> void filter(@NonNull List<T> items, @NonNull Filter<T> filter) {
         for (Iterator<T> iterator = items.iterator(); iterator.hasNext();){
             if(!filter.keepItem(iterator.next())){
@@ -29,5 +33,14 @@ public class ListUtils {
                 result.add(map.mapItem(iterator.next()));
         }
         return result;
+    }
+
+    public static <T> boolean any(@NonNull List<T> items, @NonNull Any<T> any) {
+        for (Iterator<T> iterator = items.iterator(); iterator.hasNext();){
+            if(any.haveItem(iterator.next())){
+                return true;
+            }
+        }
+        return false;
     }
 }
