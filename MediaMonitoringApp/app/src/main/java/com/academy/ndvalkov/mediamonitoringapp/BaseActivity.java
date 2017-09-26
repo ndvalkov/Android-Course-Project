@@ -189,9 +189,9 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
     }
 
-    protected void setCustomToolbarTitle(int resId) {
+    public void setCustomToolbarTitle(String title) {
         if (mToolbar != null) {
-            ((TextView) mToolbar.findViewById(R.id.title_main)).setText(resId);
+            ((TextView) mToolbar.findViewById(R.id.title_main)).setText(title);
         }
     }
 

@@ -9,11 +9,11 @@ import android.view.ViewGroup;
 import com.academy.ndvalkov.mediamonitoringapp.R;
 import com.academy.ndvalkov.mediamonitoringapp.common.BusProvider;
 
-public class ConfigFragment extends Fragment {
+public class SecondaryFragment extends Fragment {
 
-    private static final String TAG = MainFragment.class.getSimpleName();
+    private static final String TAG = SecondaryFragment.class.getSimpleName();
 
-    public ConfigFragment() {
+    public SecondaryFragment() {
         // Required empty public constructor
     }
 
@@ -25,7 +25,7 @@ public class ConfigFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_main_config,
+        View view = inflater.inflate(R.layout.fragment_main_primary,
                 container,
                 false);
 

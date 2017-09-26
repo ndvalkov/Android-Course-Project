@@ -4,10 +4,42 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <TextView
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center_vertical"
-        android:text="Summary"
-        android:textSize="30sp" />
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tvSource"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/font_normal"
+            android:text="Source"/>
+
+        <TextView
+            android:id="@+id/tvCategory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:background="@drawable/shape_label_rounded"
+            android:textColor="@color/secondaryColor"
+            android:textSize="@dimen/font_small"
+            android:text="CATEGORY"/>
+
+    </RelativeLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_normal">
+
+        <EditText
+            android:id="@+id/etVendor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/config_hint_vendor"
+            android:textSize="@dimen/font_normal" />
+
+    </android.support.design.widget.TextInputLayout>
+
+
 </LinearLayout>

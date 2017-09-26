@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="mycolors">
+    <string-array name="progressColors">
         <item>@color/secondaryLightColor</item>
         <item>@color/secondaryDarkColor</item>
+    </string-array>
+
+    <string-array name="mainTitles">
+        <item>Sources</item>
+        <item>Primary</item>
+        <item>Secondary</item>
+        <item>Summary</item>
     </string-array>
 </resources>

@@ -1,7 +1,6 @@
 package com.academy.ndvalkov.mediamonitoringapp.main;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -10,9 +9,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.academy.ndvalkov.mediamonitoringapp.BaseActivity;
 import com.academy.ndvalkov.mediamonitoringapp.R;
 import com.academy.ndvalkov.mediamonitoringapp.common.BusProvider;
-
+import com.academy.ndvalkov.mediamonitoringapp.common.events.FilterActionHideEvent;
 
 public class MainFragment extends Fragment {
 
@@ -21,6 +21,7 @@ public class MainFragment extends Fragment {
     private int mCurrentFragmentPosition;
     private ViewPager mPager;
     private ScreenSlidePagerAdapter mPagerAdapter;
+    private String[] mTitles;
 
     public MainFragment() {
         // Required empty public constructor
@@ -41,6 +42,8 @@ public class MainFragment extends Fragment {
         // Register for events from other classes and threads
         BusProvider.getInstance().register(this);
 
+        mTitles = getResources().getStringArray(R.array.mainTitles);
+
         /**
          * Instantiate a ViewPager and a PagerAdapter. Add a listener for
          * the sliding screen navigation.
@@ -52,17 +55,24 @@ public class MainFragment extends Fragment {
         mPagerAdapter = new ScreenSlidePagerAdapter(getChildFragmentManager());
         mPager.setAdapter(mPagerAdapter);
         // needed for having multiple fragments in a ViewPager
-        mPager.setOffscreenPageLimit(3);
+        mPager.setOffscreenPageLimit(4);
 
         mPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
             }
 
             @Override
             public void onPageSelected(int position) {
                 // keep track of the current page
                 mCurrentFragmentPosition = position;
+                ((BaseActivity)getActivity()).setCustomToolbarTitle(mTitles[position]);
+                if (position == 0) {
+                    BusProvider.getInstance().post(new FilterActionHideEvent(false));
+                } else {
+                    BusProvider.getInstance().post(new FilterActionHideEvent(true));
+                }
             }
 
             @Override
@@ -77,12 +87,12 @@ public class MainFragment extends Fragment {
         return view;
     }
 
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+//    @Override
+//    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
 //        Fragment sourcesFragment = new SourcesFragment();
 //        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
 //        transaction.replace(R.id.container_sources, sourcesFragment).commit();
-    }
+//    }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -110,8 +120,10 @@ public class MainFragment extends Fragment {
                 case 0:
                     return new SourcesFragment();
                 case 1:
-                    return new ConfigFragment();
+                    return new PrimaryFragment();
                 case 2:
+                    return new SecondaryFragment();
+                case 3:
                     return new SummaryFragment();
                 default:
                     throw new IllegalStateException("Invalid fragment position");
@@ -120,7 +132,7 @@ public class MainFragment extends Fragment {
 
         @Override
         public int getCount() {
-            return 3;
+            return 4;
         }
     }
 }

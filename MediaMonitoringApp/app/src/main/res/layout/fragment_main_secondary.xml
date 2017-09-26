@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <com.yalantis.beamazingtoday.ui.widget.BatRecyclerView xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/batRvSecondary"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            app:add_button_color="@drawable/selector_button_add"
+            app:divider_color="@color/grey_light"
+            app:hint="Add Command"
+            app:list_background="@color/white_translucent"
+            app:radio_button_res="@drawable/selector_radio_button" />
+
+    </LinearLayout>
+
+</LinearLayout>

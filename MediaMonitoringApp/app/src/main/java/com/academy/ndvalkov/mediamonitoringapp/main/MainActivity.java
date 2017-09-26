@@ -10,6 +10,7 @@ import com.academy.ndvalkov.mediamonitoringapp.BaseActivity;
 import com.academy.ndvalkov.mediamonitoringapp.R;
 import com.academy.ndvalkov.mediamonitoringapp.common.BusProvider;
 import com.academy.ndvalkov.mediamonitoringapp.common.events.FilterActionActivateEvent;
+import com.academy.ndvalkov.mediamonitoringapp.common.events.FilterActionHideEvent;
 import com.academy.ndvalkov.mediamonitoringapp.common.events.FilterOpenEvent;
 import com.squareup.otto.Subscribe;
 
@@ -31,7 +32,6 @@ public class MainActivity extends BaseActivity {
             }
         }
     };
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +69,21 @@ public class MainActivity extends BaseActivity {
     public void onFilterActionActivateEvent(FilterActionActivateEvent ev) {
         mFilterButton.setEnabled(true);
         mFilterButton.setAlpha((float)1);
+    }
+
+    /**
+     * Otto event library, callback method.
+     * Must be public and have a Subscribe attribute.
+     *
+     * @param ev
+     */
+    @Subscribe
+    public void onFilterActionHideEvent(FilterActionHideEvent ev) {
+        if (ev.actionHide) {
+            mFilterButton.setVisibility(View.INVISIBLE);
+        } else {
+            mFilterButton.setVisibility(View.VISIBLE);
+        }
     }
 
     private void openFilterDialog() {
