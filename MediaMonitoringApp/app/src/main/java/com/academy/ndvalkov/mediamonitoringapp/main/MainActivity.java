@@ -9,12 +9,15 @@ import android.widget.ImageButton;
 import com.academy.ndvalkov.mediamonitoringapp.BaseActivity;
 import com.academy.ndvalkov.mediamonitoringapp.R;
 import com.academy.ndvalkov.mediamonitoringapp.common.BusProvider;
-import com.academy.ndvalkov.mediamonitoringapp.common.events.FilterEvent;
+import com.academy.ndvalkov.mediamonitoringapp.common.events.FilterActionActivateEvent;
+import com.academy.ndvalkov.mediamonitoringapp.common.events.FilterOpenEvent;
+import com.squareup.otto.Subscribe;
 
 public class MainActivity extends BaseActivity {
     private static final String TAG = MainFragment.class.getSimpleName();
 
     private Fragment mMainFragment;
+    private ImageButton mFilterButton;
 
     private View.OnClickListener toolbarButtonListener = new View.OnClickListener() {
         @Override
@@ -37,13 +40,14 @@ public class MainActivity extends BaseActivity {
         setupDrawerNavigation();
 
         // Register for events from other classes and threads
-        // BusProvider.getInstance().register(this);
+        BusProvider.getInstance().register(this);
 
         /**
          * Toolbar action buttons.
          */
-        ImageButton filterButton = (ImageButton) findViewById(R.id.action_filter);
-        filterButton.setOnClickListener(toolbarButtonListener);
+        mFilterButton = (ImageButton) findViewById(R.id.action_filter);
+        mFilterButton.setOnClickListener(toolbarButtonListener);
+        mFilterButton.setEnabled(false);
 
         mMainFragment = new MainFragment();
 
@@ -54,7 +58,18 @@ public class MainActivity extends BaseActivity {
         trans.commit();
     }
 
+    /**
+     * Otto event library, callback method.
+     * Must be public and have a Subscribe attribute.
+     *
+     * @param ev
+     */
+    @Subscribe
+    public void onFilterActionActivateEvent(FilterActionActivateEvent ev) {
+        mFilterButton.setEnabled(true);
+    }
+
     private void openFilterDialog() {
-        BusProvider.getInstance().post(new FilterEvent(true));
+        BusProvider.getInstance().post(new FilterOpenEvent(true));
     }
 }

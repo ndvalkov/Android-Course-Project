@@ -22,7 +22,8 @@ import com.academy.ndvalkov.mediamonitoringapp.common.BusProvider;
 import com.academy.ndvalkov.mediamonitoringapp.common.DialogFactory;
 import com.academy.ndvalkov.mediamonitoringapp.common.ListUtils;
 import com.academy.ndvalkov.mediamonitoringapp.common.Notifications;
-import com.academy.ndvalkov.mediamonitoringapp.common.events.FilterEvent;
+import com.academy.ndvalkov.mediamonitoringapp.common.events.FilterActionActivateEvent;
+import com.academy.ndvalkov.mediamonitoringapp.common.events.FilterOpenEvent;
 import com.academy.ndvalkov.mediamonitoringapp.common.views.adapters.SourcesRVAdapter;
 import com.academy.ndvalkov.mediamonitoringapp.data.services.DataService;
 import com.academy.ndvalkov.mediamonitoringapp.data.services.HttpDataService;
@@ -79,7 +80,6 @@ public class MainFragment extends Fragment {
 
         sources = new ArrayList<>();
         all = new ArrayList<>();
-        // specify an adapter (see also next example)
         mAdapter = new SourcesRVAdapter(sources);
         mRecyclerView.setAdapter(mAdapter);
 
@@ -97,6 +97,7 @@ public class MainFragment extends Fragment {
                             sources.addAll(newsSources);
                             all.addAll(newsSources);
                             mAdapter.notifyDataSetChanged();
+                            activateFilterActionButton();
                         }
                     }
                 });
@@ -124,8 +125,12 @@ public class MainFragment extends Fragment {
      * @param ev
      */
     @Subscribe
-    public void onFilterEvent(FilterEvent ev) {
+    public void onFilterEvent(FilterOpenEvent ev) {
         openFilterDialog();
+    }
+
+    private void activateFilterActionButton() {
+        BusProvider.getInstance().post(new FilterActionActivateEvent(true));
     }
 
     private void openFilterDialog() {
