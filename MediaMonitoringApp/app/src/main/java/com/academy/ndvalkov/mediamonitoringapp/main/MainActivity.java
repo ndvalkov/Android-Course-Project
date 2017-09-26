@@ -40,7 +40,7 @@ public class MainActivity extends BaseActivity {
         setupDrawerNavigation();
 
         // Register for events from other classes and threads
-        BusProvider.getInstance().register(this);
+       BusProvider.getInstance().register(this);
 
         /**
          * Toolbar action buttons.
@@ -48,6 +48,7 @@ public class MainActivity extends BaseActivity {
         mFilterButton = (ImageButton) findViewById(R.id.action_filter);
         mFilterButton.setOnClickListener(toolbarButtonListener);
         mFilterButton.setEnabled(false);
+        mFilterButton.setAlpha((float)0.4);
 
         mMainFragment = new MainFragment();
 
@@ -67,9 +68,12 @@ public class MainActivity extends BaseActivity {
     @Subscribe
     public void onFilterActionActivateEvent(FilterActionActivateEvent ev) {
         mFilterButton.setEnabled(true);
+        mFilterButton.setAlpha((float)1);
     }
 
     private void openFilterDialog() {
-        BusProvider.getInstance().post(new FilterOpenEvent(true));
+        if (mMainFragment.isAdded()) {
+            BusProvider.getInstance().post(new FilterOpenEvent(true));
+        }
     }
 }

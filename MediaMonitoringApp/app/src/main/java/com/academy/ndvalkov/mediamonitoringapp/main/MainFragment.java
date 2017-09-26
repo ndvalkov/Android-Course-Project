@@ -1,8 +1,10 @@
 package com.academy.ndvalkov.mediamonitoringapp.main;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
@@ -43,6 +45,8 @@ public class MainFragment extends Fragment {
 
     private static final String TAG = MainFragment.class.getSimpleName();
 
+    private Activity mContext;
+
     private List<NewsSource> sources;
     private List<NewsSource> all;
     private RecyclerView mRecyclerView;
@@ -52,6 +56,8 @@ public class MainFragment extends Fragment {
 
     public MainFragment() {
         // Required empty public constructor
+
+
     }
 
     @Override
@@ -65,6 +71,9 @@ public class MainFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_main,
                 container,
                 false);
+
+        // Register for events from other classes and threads
+        BusProvider.getInstance().register(this);
 
         mRecyclerView = (RecyclerView) view.findViewById(R.id.rvSources);
 
@@ -97,7 +106,13 @@ public class MainFragment extends Fragment {
                             sources.addAll(newsSources);
                             all.addAll(newsSources);
                             mAdapter.notifyDataSetChanged();
-                            activateFilterActionButton();
+
+                            new Handler().postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    activateFilterActionButton();
+                                }
+                            }, 100);
                         }
                     }
                 });
@@ -111,8 +126,9 @@ public class MainFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         try {
-            // Register for events from other classes and threads
-            BusProvider.getInstance().register(this);
+            // fix bug in openFilterDialog(), getActivity() return null sometimes
+            mContext = getActivity();
+
         } catch (ClassCastException e) {
             e.printStackTrace();
         }
@@ -126,7 +142,9 @@ public class MainFragment extends Fragment {
      */
     @Subscribe
     public void onFilterEvent(FilterOpenEvent ev) {
-        openFilterDialog();
+        if(isAdded()){
+            openFilterDialog();
+        }
     }
 
     private void activateFilterActionButton() {
@@ -149,12 +167,12 @@ public class MainFragment extends Fragment {
             }
         });
 
-        LayoutInflater inflater = getActivity().getLayoutInflater();
+        LayoutInflater inflater = mContext.getLayoutInflater();
         final LinearLayout contentView = (LinearLayout)inflater.inflate(R.layout.dialog_filter, null, false);
         final LabelledSpinner spinner = (LabelledSpinner) contentView.findViewById(R.id.spinCategory);
         final AutoCompleteTextView acName = (AutoCompleteTextView) contentView.findViewById(R.id.acName);
 
-        final ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(),
+        final ArrayAdapter<String> adapter = new ArrayAdapter<>(mContext,
                 android.R.layout.simple_dropdown_item_1line, new ArrayList<>(namesOfSources));
         acName.setAdapter(adapter);
         acName.setOnTouchListener(new View.OnTouchListener() {
@@ -212,10 +230,10 @@ public class MainFragment extends Fragment {
 
         DialogFactory.DialogParams dlgParams = new DialogFactory.DialogParams();
         dlgParams.setTitle(getString(R.string.dialog_title_filter))
-                .setIcon(ContextCompat.getDrawable(getActivity(), R.drawable.ic_notify))
+                .setIcon(ContextCompat.getDrawable(mContext, R.drawable.ic_notify))
                 .setContentWidget(contentView)
                 .setOKButton(true);
-        final Dialog dlg = new DialogFactory(getActivity()).createDialog(dlgParams);
+        final Dialog dlg = new DialogFactory(mContext).createDialog(dlgParams);
         dlg.findViewById(R.id.okButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
