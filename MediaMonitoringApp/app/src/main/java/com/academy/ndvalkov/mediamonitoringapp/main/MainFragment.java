@@ -1,63 +1,29 @@
 package com.academy.ndvalkov.mediamonitoringapp.main;
 
-import android.app.Activity;
-import android.app.Dialog;
-import android.graphics.Rect;
 import android.os.Bundle;
-import android.os.Handler;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
-import android.widget.LinearLayout;
 
 import com.academy.ndvalkov.mediamonitoringapp.R;
 import com.academy.ndvalkov.mediamonitoringapp.common.BusProvider;
-import com.academy.ndvalkov.mediamonitoringapp.common.DialogFactory;
-import com.academy.ndvalkov.mediamonitoringapp.common.ListUtils;
-import com.academy.ndvalkov.mediamonitoringapp.common.Notifications;
-import com.academy.ndvalkov.mediamonitoringapp.common.events.FilterActionActivateEvent;
-import com.academy.ndvalkov.mediamonitoringapp.common.events.FilterOpenEvent;
-import com.academy.ndvalkov.mediamonitoringapp.common.views.adapters.SourcesRVAdapter;
-import com.academy.ndvalkov.mediamonitoringapp.data.services.DataService;
-import com.academy.ndvalkov.mediamonitoringapp.data.services.HttpDataService;
-import com.academy.ndvalkov.mediamonitoringapp.data.tasks.HttpTask;
-import com.academy.ndvalkov.mediamonitoringapp.models.NewsSource;
-import com.farbod.labelledspinner.LabelledSpinner;
-import com.squareup.otto.Subscribe;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 
 public class MainFragment extends Fragment {
 
     private static final String TAG = MainFragment.class.getSimpleName();
 
-    private Activity mContext;
-
-    private List<NewsSource> sources;
-    private List<NewsSource> all;
-    private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
-    private Set<String> mCategories = new HashSet<>();
+    private int mCurrentFragmentPosition;
+    private ViewPager mPager;
+    private ScreenSlidePagerAdapter mPagerAdapter;
 
     public MainFragment() {
         // Required empty public constructor
-
-
     }
 
     @Override
@@ -75,59 +41,54 @@ public class MainFragment extends Fragment {
         // Register for events from other classes and threads
         BusProvider.getInstance().register(this);
 
-        mRecyclerView = (RecyclerView) view.findViewById(R.id.rvSources);
+        /**
+         * Instantiate a ViewPager and a PagerAdapter. Add a listener for
+         * the sliding screen navigation.
+         * ViewPager -> Pager widget, swiping pages(fragments) horizontally, handles animation.
+         * PagerAdapter -> The pager adapter, which provides the pages to the view pager widget.
+         */
+        mPager = (ViewPager) view.findViewById(R.id.pager);
+        // getChildFragmentManager() instead of getFragmentManager()!
+        mPagerAdapter = new ScreenSlidePagerAdapter(getChildFragmentManager());
+        mPager.setAdapter(mPagerAdapter);
+        // needed for having multiple fragments in a ViewPager
+        mPager.setOffscreenPageLimit(3);
 
-        // use this setting to improve performance if you know that changes
-        // in content do not change the layout size of the RecyclerView
-        mRecyclerView.setHasFixedSize(true);
-
-        // use a linear layout manager
-        mLayoutManager = new LinearLayoutManager(getActivity());
-        mRecyclerView.setLayoutManager(mLayoutManager);
-
-        mRecyclerView.addItemDecoration(new VerticalSpacingDecoration((int) getResources().getDimension(R.dimen.activity_vertical_margin)));
-
-        sources = new ArrayList<>();
-        all = new ArrayList<>();
-        mAdapter = new SourcesRVAdapter(sources);
-        mRecyclerView.setAdapter(mAdapter);
-
-        DataService<NewsSource> sourcesData = new HttpDataService<>("https://newsapi.org/v1/sources?language=en", NewsSource.class, NewsSource[].class);
-        sourcesData.getAll(new HttpTask.OnHttpTaskResult<NewsSource[]>() {
+        mPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
-            public void call(final Exception ex, NewsSource[] result) {
-                final List<NewsSource> newsSources = Arrays.asList(result);
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (ex != null) {
-                            Notifications.showNegative(getActivity(), ex.getMessage());
-                        } else {
-                            sources.addAll(newsSources);
-                            all.addAll(newsSources);
-                            mAdapter.notifyDataSetChanged();
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            }
 
-                            new Handler().postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    activateFilterActionButton();
-                                }
-                            }, 100);
-                        }
-                    }
-                });
+            @Override
+            public void onPageSelected(int position) {
+                // keep track of the current page
+                mCurrentFragmentPosition = position;
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
             }
         });
 
+
+
+
         return view;
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+//        Fragment sourcesFragment = new SourcesFragment();
+//        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+//        transaction.replace(R.id.container_sources, sourcesFragment).commit();
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         try {
-            // fix bug in openFilterDialog(), getActivity() return null sometimes
-            mContext = getActivity();
+            // mContext = getActivity();
 
         } catch (ClassCastException e) {
             e.printStackTrace();
@@ -135,143 +96,31 @@ public class MainFragment extends Fragment {
     }
 
     /**
-     * Otto event library, callback method.
-     * Must be public and have a Subscribe attribute.
-     *
-     * @param ev
+     * A simple pager adapter that represents several Fragment objects, in
+     * sequence.
      */
-    @Subscribe
-    public void onFilterEvent(FilterOpenEvent ev) {
-        if(isAdded()){
-            openFilterDialog();
-        }
-    }
-
-    private void activateFilterActionButton() {
-        BusProvider.getInstance().post(new FilterActionActivateEvent(true));
-    }
-
-    private void openFilterDialog() {
-        if (mCategories.isEmpty()) {
-            for (NewsSource source : sources) {
-                if (!mCategories.contains(source.getCategory())) {
-                    mCategories.add(source.getCategory());
-                }
-            }
-        }
-
-        final List<String> namesOfSources = ListUtils.map(sources, new ListUtils.Map<NewsSource, String>() {
-            @Override
-            public String mapItem(NewsSource item) {
-                return item.getName();
-            }
-        });
-
-        LayoutInflater inflater = mContext.getLayoutInflater();
-        final LinearLayout contentView = (LinearLayout)inflater.inflate(R.layout.dialog_filter, null, false);
-        final LabelledSpinner spinner = (LabelledSpinner) contentView.findViewById(R.id.spinCategory);
-        final AutoCompleteTextView acName = (AutoCompleteTextView) contentView.findViewById(R.id.acName);
-
-        final ArrayAdapter<String> adapter = new ArrayAdapter<>(mContext,
-                android.R.layout.simple_dropdown_item_1line, new ArrayList<>(namesOfSources));
-        acName.setAdapter(adapter);
-        acName.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                acName.showDropDown();
-                return false;
-            }
-        });
-
-        spinner.setItemsArray(new ArrayList<>(mCategories));
-        spinner.setOnItemChosenListener(new LabelledSpinner.OnItemChosenListener() {
-            @Override
-            public void onItemChosen(View labelledSpinner, AdapterView<?> adapterView, View itemView, int position, long id) {
-                sources.clear();
-                sources.addAll(all);
-                ListUtils.filter(sources, new ListUtils.Filter<NewsSource>() {
-                    @Override
-                    public boolean keepItem(NewsSource item) {
-                        boolean hasCategory = item.getCategory().equals(spinner.getSpinner().getSelectedItem());
-                        boolean hasName;
-                        String name = acName.getText().toString();
-                        if (TextUtils.isEmpty(name)) {
-                            hasName = true;
-                        } else {
-                            hasName = item.getName().equals(name);
-                        }
-
-                        return hasCategory && hasName;
-                    }
-                });
-
-                List<String> namesByCategory = ListUtils.map(sources, new ListUtils.Map<NewsSource, String>() {
-                    @Override
-                    public String mapItem(NewsSource item) {
-                        return item.getName();
-                    }
-                });
-
-                namesOfSources.clear();
-                namesOfSources.addAll(namesByCategory);
-                adapter.clear();
-                adapter.addAll(namesOfSources);
-            }
-
-            @Override
-            public void onNothingChosen(View labelledSpinner, AdapterView<?> adapterView) {
-
-            }
-        });
-
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT, 1f);
-        contentView.setLayoutParams(params);
-
-        DialogFactory.DialogParams dlgParams = new DialogFactory.DialogParams();
-        dlgParams.setTitle(getString(R.string.dialog_title_filter))
-                .setIcon(ContextCompat.getDrawable(mContext, R.drawable.ic_notify))
-                .setContentWidget(contentView)
-                .setOKButton(true);
-        final Dialog dlg = new DialogFactory(mContext).createDialog(dlgParams);
-        dlg.findViewById(R.id.okButton).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                sources.clear();
-                sources.addAll(all);
-                ListUtils.filter(sources, new ListUtils.Filter<NewsSource>() {
-                    @Override
-                    public boolean keepItem(NewsSource item) {
-                        boolean hasCategory = item.getCategory().equals(spinner.getSpinner().getSelectedItem());
-                        boolean hasName;
-                        String name = acName.getText().toString();
-                        if (TextUtils.isEmpty(name)) {
-                            hasName = true;
-                        } else {
-                            hasName = item.getName().equals(name);
-                        }
-
-                        return hasCategory && hasName;
-                    }
-                });
-
-                mAdapter.notifyDataSetChanged();
-                dlg.dismiss();
-            }
-        });
-    }
-
-    private class VerticalSpacingDecoration extends RecyclerView.ItemDecoration {
-
-        private int spacing;
-
-        public VerticalSpacingDecoration(int spacing) {
-            this.spacing = spacing;
+    private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
+        public ScreenSlidePagerAdapter(FragmentManager fm) {
+            super(fm);
         }
 
         @Override
-        public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
-            outRect.bottom = spacing;
+        public Fragment getItem(int position) {
+            switch (position) {
+                case 0:
+                    return new SourcesFragment();
+                case 1:
+                    return new ConfigFragment();
+                case 2:
+                    return new SummaryFragment();
+                default:
+                    throw new IllegalStateException("Invalid fragment position");
+            }
+        }
+
+        @Override
+        public int getCount() {
+            return 3;
         }
     }
 }

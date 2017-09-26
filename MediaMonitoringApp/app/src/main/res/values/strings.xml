@@ -2,7 +2,7 @@
     <string name="app_name">Media Monitor</string>
     <string name="app_short_name">Media Monitor</string>
 
-    <string name="title_activity_main">Main</string>
+    <string name="title_activity_main">Sources</string>
     <string name="title_activity_signup">Signup</string>
     <string name="title_activity_profile">Profile</string>
     <string name="title_activity_reset_password">ResetPassword</string>

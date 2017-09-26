@@ -48,14 +48,14 @@ public class MainActivity extends BaseActivity {
         mFilterButton = (ImageButton) findViewById(R.id.action_filter);
         mFilterButton.setOnClickListener(toolbarButtonListener);
         mFilterButton.setEnabled(false);
-        mFilterButton.setAlpha((float)0.4);
+        mFilterButton.setAlpha((float)0.6);
 
         mMainFragment = new MainFragment();
 
         FragmentTransaction trans = getSupportFragmentManager()
                 .beginTransaction();
 
-        trans.replace(R.id.container_fragments, mMainFragment);
+        trans.replace(R.id.container_main, mMainFragment);
         trans.commit();
     }
 
