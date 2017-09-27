@@ -104,6 +104,9 @@ public class MainActivity extends BaseActivity {
             mNextButton.setVisibility(View.INVISIBLE);
         } else {
             mNextButton.setVisibility(View.VISIBLE);
+//            ObjectAnimator animator = ObjectAnimator
+//                    .ofFloat(mNextButton, "rotation", mNextButton.getRotation() + 360);
+//            animator.start();
         }
     }
 

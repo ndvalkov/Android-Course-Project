@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SimpleItemAnimator;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -84,17 +85,13 @@ public class SourcesFragment extends Fragment {
 
         mRecyclerView.addItemDecoration(new VerticalSpacingDecoration((int) getResources().getDimension(R.dimen.activity_vertical_margin)));
 
+        // override to improve the custom selected item animation
+        ((SimpleItemAnimator) mRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
+
         sources = new ArrayList<>();
         all = new ArrayList<>();
         mAdapter = new SourcesRVAdapter(sources);
         mRecyclerView.setAdapter(mAdapter);
-
-//        final LoadingFragment loadingFragment = LoadingFragment.create(getContext());
-//        getChildFragmentManager()
-//                .beginTransaction()
-//                .add(loadingFragment, "fragment_loading")
-//                .commit();
-//        loadingFragment.show();
 
         final ProgressBar progress = (CircularProgressBar) view.findViewById(R.id.progress);
         progress.setVisibility(View.VISIBLE);
@@ -122,7 +119,6 @@ public class SourcesFragment extends Fragment {
                             }, 100);
 
                             progress.setVisibility(View.GONE);
-                            // loadingFragment.hide();
                         }
                     }
                 });
