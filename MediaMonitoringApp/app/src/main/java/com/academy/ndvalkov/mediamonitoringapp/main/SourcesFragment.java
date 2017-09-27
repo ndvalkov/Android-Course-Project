@@ -54,6 +54,18 @@ public class SourcesFragment extends Fragment {
     private RecyclerView.LayoutManager mLayoutManager;
     private Set<String> mCategories = new HashSet<>();
 
+    public RecyclerView getRecyclerView() {
+        return mRecyclerView;
+    }
+
+    public RecyclerView.Adapter getAdapter() {
+        return mAdapter;
+    }
+
+    public List<NewsSource> getSources() {
+        return sources;
+    }
+
     public SourcesFragment() {
         // Required empty public constructor
     }

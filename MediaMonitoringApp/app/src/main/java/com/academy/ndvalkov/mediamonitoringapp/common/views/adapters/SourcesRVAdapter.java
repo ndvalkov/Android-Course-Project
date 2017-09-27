@@ -24,6 +24,10 @@ public class SourcesRVAdapter extends
     private List<NewsSource> sourcesList;
     private int selected_position = -1;
 
+    public int getSelectedPosition() {
+        return selected_position;
+    }
+
     /**
      * View holder class
      */

@@ -12,8 +12,15 @@ import android.view.ViewGroup;
 import com.academy.ndvalkov.mediamonitoringapp.BaseActivity;
 import com.academy.ndvalkov.mediamonitoringapp.R;
 import com.academy.ndvalkov.mediamonitoringapp.common.BusProvider;
+import com.academy.ndvalkov.mediamonitoringapp.common.ListUtils;
 import com.academy.ndvalkov.mediamonitoringapp.common.events.FilterActionHideEvent;
 import com.academy.ndvalkov.mediamonitoringapp.common.events.NextActionHideEvent;
+import com.academy.ndvalkov.mediamonitoringapp.common.events.UpdateSummaryEvent;
+import com.academy.ndvalkov.mediamonitoringapp.common.views.adapters.SourcesRVAdapter;
+import com.academy.ndvalkov.mediamonitoringapp.models.NewsSource;
+import com.yalantis.beamazingtoday.interfaces.BatModel;
+
+import java.util.List;
 
 public class MainFragment extends Fragment {
 
@@ -79,6 +86,8 @@ public class MainFragment extends Fragment {
                     BusProvider.getInstance().post(new FilterActionHideEvent(true));
                     if (position == 3) {
                         BusProvider.getInstance().post(new NextActionHideEvent(true));
+                        CollectDataFromFragments();
+                        BusProvider.getInstance().post(new UpdateSummaryEvent(true));
                     } else {
                         BusProvider.getInstance().post(new NextActionHideEvent(false));
                     }
@@ -94,6 +103,8 @@ public class MainFragment extends Fragment {
 
         return view;
     }
+
+
 
 //    @Override
 //    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -111,6 +122,37 @@ public class MainFragment extends Fragment {
         } catch (ClassCastException e) {
             e.printStackTrace();
         }
+    }
+
+    private void CollectDataFromFragments() {
+        FragmentManager fm = getChildFragmentManager();
+        List<Fragment> frags = fm.getFragments();
+        SourcesFragment sourcesFragment = (SourcesFragment) frags.get(0);
+        KeywordFragment primaryFragment = (KeywordFragment) frags.get(1);
+        KeywordFragment secondaryFragment = (KeywordFragment) frags.get(2);
+        SummaryFragment summaryFragment = (SummaryFragment) frags.get(3);
+
+        SourcesRVAdapter sourcesAdapter = (SourcesRVAdapter)sourcesFragment.getAdapter();
+        int selectedPosition = sourcesAdapter.getSelectedPosition();
+        if (selectedPosition != -1) {
+            NewsSource selectedSource = sourcesFragment.getSources().get(selectedPosition);
+            summaryFragment.setSelectedSource(selectedSource);
+        }
+
+        List<String> primaryKeywords = extractKeywords(primaryFragment.getKeywords());
+        List<String> secondaryKeywords = extractKeywords(secondaryFragment.getKeywords());
+
+        summaryFragment.setPrimaryKeywords(primaryKeywords);
+        summaryFragment.setSecondaryKeywords(secondaryKeywords);
+    }
+
+    private List<String> extractKeywords(List<BatModel> batModels) {
+        return ListUtils.map(batModels, new ListUtils.Map<BatModel, String>() {
+            @Override
+            public String mapItem(BatModel item) {
+                return item.getText();
+            }
+        });
     }
 
     /**
