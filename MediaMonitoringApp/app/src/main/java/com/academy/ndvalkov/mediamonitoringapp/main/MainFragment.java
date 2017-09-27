@@ -128,9 +128,13 @@ public class MainFragment extends Fragment {
                 case 0:
                     return new SourcesFragment();
                 case 1:
-                    return new PrimaryFragment();
+                    KeywordFragment primaryFragment = new KeywordFragment();
+                    primaryFragment.setPrimary(true);
+                    return primaryFragment;
                 case 2:
-                    return new SecondaryFragment();
+                    KeywordFragment secondaryFragment = new KeywordFragment();
+                    secondaryFragment.setPrimary(false);
+                    return secondaryFragment;
                 case 3:
                     return new SummaryFragment();
                 default:

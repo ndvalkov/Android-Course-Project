@@ -25,15 +25,16 @@ import com.yalantis.beamazingtoday.ui.widget.BatRecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PrimaryFragment extends Fragment implements BatListener {
+public class KeywordFragment extends Fragment implements BatListener {
 
-    private static final String TAG = PrimaryFragment.class.getSimpleName();
+    private static final String TAG = KeywordFragment.class.getSimpleName();
 
     private BatRecyclerView mRecyclerView;
     private BatAdapter mAdapter;
     private List<BatModel> mKeywords;
     private BatItemAnimator mAnimator;
     private FloatingActionButton mFabDelete;
+    private boolean mIsPrimary;
 
     public BatRecyclerView getRecyclerView() {
         return mRecyclerView;
@@ -43,7 +44,15 @@ public class PrimaryFragment extends Fragment implements BatListener {
         return mKeywords;
     }
 
-    public PrimaryFragment() {
+    public boolean isPrimary() {
+        return mIsPrimary;
+    }
+
+    public void setPrimary(boolean primary) {
+        mIsPrimary = primary;
+    }
+
+    public KeywordFragment() {
         // Required empty public constructor
     }
 
@@ -55,7 +64,7 @@ public class PrimaryFragment extends Fragment implements BatListener {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_main_primary,
+        View view = inflater.inflate(R.layout.fragment_main_keyword,
                 container,
                 false);
 
@@ -78,8 +87,13 @@ public class PrimaryFragment extends Fragment implements BatListener {
             }
         });
 
+        mRecyclerView = (BatRecyclerView) view.findViewById(R.id.batRvKeywords);
+        if (isPrimary()) {
+            mRecyclerView.setHint(getResources().getString(R.string.main_keywords_primary));
+        } else {
+            mRecyclerView.setHint(getResources().getString(R.string.main_keywords_secondary));
+        }
 
-        mRecyclerView = (BatRecyclerView) view.findViewById(R.id.batRvSecondary);
         mAnimator = new BatItemAnimator();
 
         mRecyclerView.getView().setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -152,3 +166,4 @@ public class PrimaryFragment extends Fragment implements BatListener {
         }
     }
 }
+

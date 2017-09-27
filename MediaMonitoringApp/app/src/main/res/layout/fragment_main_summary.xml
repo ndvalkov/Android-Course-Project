@@ -36,7 +36,7 @@
             android:id="@+id/etVendor"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/config_hint_vendor"
+            android:hint="@string/main_hint_vendor"
             android:textSize="@dimen/font_normal" />
 
     </android.support.design.widget.TextInputLayout>

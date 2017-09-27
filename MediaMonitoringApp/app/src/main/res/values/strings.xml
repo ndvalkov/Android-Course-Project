@@ -35,8 +35,10 @@
     <string name="lbl_forgot_password">Forgot password?</string>
     <string name="forgot_password_msg">We just need your registered Email Id to sent you password reset instructions.</string>
 
-    <!--Values related to Config-->
-    <string name="config_hint_vendor">Vendor</string>
+    <!--Values related to Main-->
+    <string name="main_hint_vendor">Vendor</string>
+    <string name="main_keywords_primary">Add Primary Keyword</string>
+    <string name="main_keywords_secondary">Add Secondary Keyword</string>
 
 
     <!--Nav drawer-->
