@@ -39,6 +39,9 @@
     <string name="main_hint_vendor">Vendor</string>
     <string name="main_keywords_primary">Add Primary Keyword</string>
     <string name="main_keywords_secondary">Add Secondary Keyword</string>
+    <string name="main_btn_save">Save</string>
+    <string name="main_tv_primary">Primary</string>
+    <string name="main_tv_secondary">Secondary</string>
 
 
     <!--Nav drawer-->
@@ -72,7 +75,6 @@
     <string name="button.ignore">Ignore</string>
     <string name="button.yes">Yes</string>
     <string name="button.no">No</string>
-
 
 
 </resources>

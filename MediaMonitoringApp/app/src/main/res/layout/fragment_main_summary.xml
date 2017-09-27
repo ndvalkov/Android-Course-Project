@@ -1,19 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
     <RelativeLayout
+        android:id="@+id/container_source"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true">
 
         <TextView
             android:id="@+id/tvSource"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/font_normal"
-            android:text="Source"/>
+            android:text="Source"
+            android:textSize="@dimen/font_normal" />
 
         <TextView
             android:id="@+id/tvCategory"
@@ -21,15 +22,17 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:background="@drawable/shape_label_rounded"
+            android:text="CATEGORY"
             android:textColor="@color/secondaryColor"
-            android:textSize="@dimen/font_small"
-            android:text="CATEGORY"/>
+            android:textSize="@dimen/font_small" />
 
     </RelativeLayout>
 
     <android.support.design.widget.TextInputLayout
+        android:id="@+id/container_vendor"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/container_source"
         android:layout_marginTop="@dimen/spacing_normal">
 
         <EditText
@@ -41,7 +44,34 @@
 
     </android.support.design.widget.TextInputLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@+id/container_vendor"
+        android:baselineAligned="false">
 
+        <ListView
+            android:id="@+id/lvPrimary"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
 
+        <ListView
+            android:id="@+id/lvSecondary"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
 
-</LinearLayout>
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btnSave"
+        style="@style/NormalButton.PrimaryPositiveButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:text="@string/main_btn_save"/>
+
+</RelativeLayout>

@@ -5,6 +5,8 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.academy.ndvalkov.mediamonitoringapp.R;
@@ -13,6 +15,7 @@ import com.academy.ndvalkov.mediamonitoringapp.common.events.UpdateSummaryEvent;
 import com.academy.ndvalkov.mediamonitoringapp.models.NewsSource;
 import com.squareup.otto.Subscribe;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class SummaryFragment extends Fragment {
@@ -24,6 +27,8 @@ public class SummaryFragment extends Fragment {
     private List<String> mSecondaryKeywords;
     private TextView mTvSource;
     private TextView mTvCategory;
+    private ListView mLvPrimary;
+    private ListView mLvSecondary;
 
     public NewsSource getSelectedSource() {
         return mSelectedSource;
@@ -70,7 +75,40 @@ public class SummaryFragment extends Fragment {
 
         mTvSource = (TextView)view.findViewById(R.id.tvSource);
         mTvCategory = (TextView)view.findViewById(R.id.tvCategory);
+        mLvPrimary = (ListView)view.findViewById(R.id.lvPrimary);
+        mLvSecondary = (ListView)view.findViewById(R.id.lvSecondary);
 
+        List<String> items = new ArrayList<>();
+        items.add("Word 1ffffsss");
+        items.add("Word ffff2");
+        items.add("Word ff3");
+        items.add("Word ffff2");
+        items.add("Word ff3");
+        items.add("Word ffff2");
+        items.add("Word ff3");
+
+        List<String> items1 = new ArrayList<>();
+        items1.add("Sec Word fff1");
+        items1.add("Sec Word 2");
+        items1.add("Sec ffffWord 3");
+
+        ArrayAdapter<String> primAdapter = new ArrayAdapter<>(getActivity(),
+                android.R.layout.simple_list_item_1, items);
+        mLvPrimary.setAdapter(primAdapter);
+        ArrayAdapter<String> secAdapter = new ArrayAdapter<>(getActivity(),
+                android.R.layout.simple_list_item_1, items1);
+        mLvSecondary.setAdapter(secAdapter);
+
+        View headerPrimary = inflater.inflate(R.layout.header_keywords, mLvPrimary, false);
+        TextView tvHeaderPrim = (TextView)headerPrimary.findViewById(R.id.tvHeader);
+        tvHeaderPrim.setText(getResources().getString(R.string.main_tv_primary));
+
+        View headerSecondary = inflater.inflate(R.layout.header_keywords, mLvSecondary, false);
+        TextView tvHeaderSec = (TextView)headerSecondary.findViewById(R.id.tvHeader);
+        tvHeaderSec.setText(getResources().getString(R.string.main_tv_secondary));
+
+        mLvPrimary.addHeaderView(headerPrimary);
+        mLvSecondary.addHeaderView(headerSecondary);
 
         return view;
     }
@@ -100,6 +138,6 @@ public class SummaryFragment extends Fragment {
     public void onUpdateSummaryEvent(UpdateSummaryEvent ev) {
         mTvSource.setText(mSelectedSource != null ? mSelectedSource.getName() : "Source");
         mTvCategory.setText(mSelectedSource != null ? mSelectedSource.getCategory() : "Category");
-        
+
     }
 }
