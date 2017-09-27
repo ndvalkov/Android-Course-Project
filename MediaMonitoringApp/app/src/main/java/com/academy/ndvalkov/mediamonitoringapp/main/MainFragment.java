@@ -13,6 +13,7 @@ import com.academy.ndvalkov.mediamonitoringapp.BaseActivity;
 import com.academy.ndvalkov.mediamonitoringapp.R;
 import com.academy.ndvalkov.mediamonitoringapp.common.BusProvider;
 import com.academy.ndvalkov.mediamonitoringapp.common.events.FilterActionHideEvent;
+import com.academy.ndvalkov.mediamonitoringapp.common.events.NextActionHideEvent;
 
 public class MainFragment extends Fragment {
 
@@ -22,6 +23,10 @@ public class MainFragment extends Fragment {
     private ViewPager mPager;
     private ScreenSlidePagerAdapter mPagerAdapter;
     private String[] mTitles;
+
+    public ViewPager getPager() {
+        return mPager;
+    }
 
     public MainFragment() {
         // Required empty public constructor
@@ -67,11 +72,16 @@ public class MainFragment extends Fragment {
             public void onPageSelected(int position) {
                 // keep track of the current page
                 mCurrentFragmentPosition = position;
-                ((BaseActivity)getActivity()).setCustomToolbarTitle(mTitles[position]);
+                ((BaseActivity) getActivity()).setCustomToolbarTitle(mTitles[position]);
                 if (position == 0) {
                     BusProvider.getInstance().post(new FilterActionHideEvent(false));
                 } else {
                     BusProvider.getInstance().post(new FilterActionHideEvent(true));
+                    if (position == 3) {
+                        BusProvider.getInstance().post(new NextActionHideEvent(true));
+                    } else {
+                        BusProvider.getInstance().post(new NextActionHideEvent(false));
+                    }
                 }
             }
 
@@ -80,8 +90,6 @@ public class MainFragment extends Fragment {
 
             }
         });
-
-
 
 
         return view;

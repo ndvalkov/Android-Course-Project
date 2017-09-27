@@ -1,7 +1,6 @@
 package com.academy.ndvalkov.mediamonitoringapp.main;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.widget.ImageButton;
@@ -12,20 +11,25 @@ import com.academy.ndvalkov.mediamonitoringapp.common.BusProvider;
 import com.academy.ndvalkov.mediamonitoringapp.common.events.FilterActionActivateEvent;
 import com.academy.ndvalkov.mediamonitoringapp.common.events.FilterActionHideEvent;
 import com.academy.ndvalkov.mediamonitoringapp.common.events.FilterOpenEvent;
+import com.academy.ndvalkov.mediamonitoringapp.common.events.NextActionHideEvent;
 import com.squareup.otto.Subscribe;
 
 public class MainActivity extends BaseActivity {
     private static final String TAG = MainFragment.class.getSimpleName();
 
-    private Fragment mMainFragment;
+    private MainFragment mMainFragment;
     private ImageButton mFilterButton;
+    private ImageButton mNextButton;
 
-    private View.OnClickListener toolbarButtonListener = new View.OnClickListener() {
+    private View.OnClickListener mToolbarButtonListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.action_filter:
                     openFilterDialog();
+                    break;
+                case R.id.action_next:
+                    navigateNext();
                     break;
                 default:
                     break;
@@ -40,15 +44,17 @@ public class MainActivity extends BaseActivity {
         setupDrawerNavigation();
 
         // Register for events from other classes and threads
-       BusProvider.getInstance().register(this);
+        BusProvider.getInstance().register(this);
 
         /**
          * Toolbar action buttons.
          */
         mFilterButton = (ImageButton) findViewById(R.id.action_filter);
-        mFilterButton.setOnClickListener(toolbarButtonListener);
+        mNextButton = (ImageButton) findViewById(R.id.action_next);
+        mFilterButton.setOnClickListener(mToolbarButtonListener);
+        mNextButton.setOnClickListener(mToolbarButtonListener);
         mFilterButton.setEnabled(false);
-        mFilterButton.setAlpha((float)0.6);
+        mFilterButton.setAlpha((float) 0.6);
 
         mMainFragment = new MainFragment();
 
@@ -68,7 +74,7 @@ public class MainActivity extends BaseActivity {
     @Subscribe
     public void onFilterActionActivateEvent(FilterActionActivateEvent ev) {
         mFilterButton.setEnabled(true);
-        mFilterButton.setAlpha((float)1);
+        mFilterButton.setAlpha((float) 1);
     }
 
     /**
@@ -86,9 +92,30 @@ public class MainActivity extends BaseActivity {
         }
     }
 
+    /**
+     * Otto event library, callback method.
+     * Must be public and have a Subscribe attribute.
+     *
+     * @param ev
+     */
+    @Subscribe
+    public void onNextActionHideEvent(NextActionHideEvent ev) {
+        if (ev.nextHide) {
+            mNextButton.setVisibility(View.INVISIBLE);
+        } else {
+            mNextButton.setVisibility(View.VISIBLE);
+        }
+    }
+
     private void openFilterDialog() {
         if (mMainFragment.isAdded()) {
             BusProvider.getInstance().post(new FilterOpenEvent(true));
+        }
+    }
+
+    private void navigateNext() {
+        if (mMainFragment.isAdded()) {
+            mMainFragment.getPager().setCurrentItem(mMainFragment.getPager().getCurrentItem() + 1, true);
         }
     }
 }
