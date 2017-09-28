@@ -184,7 +184,9 @@ public class SummaryFragment extends Fragment {
         String dateCreated = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
                 .format(Calendar.getInstance().getTime());
 
-        final MonitoringConfig mc = new MonitoringConfig(source,
+        final MonitoringConfig mc = new MonitoringConfig(
+                mSelectedSource.getId(),
+                source,
                 category,
                 vendor,
                 primKeywords,

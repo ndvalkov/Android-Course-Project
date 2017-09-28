@@ -6,17 +6,27 @@ public class NewsSource implements Serializable {
     public NewsSource() {
     }
 
-    public NewsSource(String name, String description, String url, String category) {
+    public NewsSource(String id, String name, String description, String url, String category) {
+        this.id = id;
         this.name = name;
         this.description = description;
         this.url = url;
         this.category = category;
     }
 
+    private String id;
     private String name;
     private String description;
     private String url;
     private String category;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;

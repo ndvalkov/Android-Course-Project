@@ -9,8 +9,10 @@ import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.academy.ndvalkov.mediamonitoringapp.R;
 import com.academy.ndvalkov.mediamonitoringapp.common.BusProvider;
@@ -19,9 +21,11 @@ import com.academy.ndvalkov.mediamonitoringapp.common.ListUtils;
 import com.academy.ndvalkov.mediamonitoringapp.common.events.articles.OpenSelectEvent;
 import com.academy.ndvalkov.mediamonitoringapp.data.db.DbProvider;
 import com.academy.ndvalkov.mediamonitoringapp.models.MonitoringConfig;
+import com.farbod.labelledspinner.LabelledSpinner;
 import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import fr.castorflex.android.circularprogressbar.CircularProgressBar;
@@ -130,6 +134,23 @@ public class ArticlesFragment extends Fragment {
     private void showDialog(List<String> sources) {
         LayoutInflater inflater = getActivity().getLayoutInflater();
         final LinearLayout contentView = (LinearLayout)inflater.inflate(R.layout.dialog_select_source, null, false);
+        final LabelledSpinner spinner = (LabelledSpinner) contentView.findViewById(R.id.spinSources);
+
+        // remove duplicate entries
+        spinner.setItemsArray(new ArrayList<>(new HashSet<>(sources)));
+
+
+        spinner.setOnItemChosenListener(new LabelledSpinner.OnItemChosenListener() {
+            @Override
+            public void onItemChosen(View labelledSpinner, AdapterView<?> adapterView, View itemView, int position, long id) {
+
+            }
+
+            @Override
+            public void onNothingChosen(View labelledSpinner, AdapterView<?> adapterView) {
+
+            }
+        });
 
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT, 1f);
@@ -145,7 +166,9 @@ public class ArticlesFragment extends Fragment {
         dlg.findViewById(R.id.okButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Toast.makeText(getActivity(),
+                        spinner.getSpinner().getSelectedItem().toString(),
+                        Toast.LENGTH_SHORT).show();
                 dlg.dismiss();
             }
         });

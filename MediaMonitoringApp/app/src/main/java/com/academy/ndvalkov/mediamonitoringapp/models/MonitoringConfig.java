@@ -3,6 +3,7 @@ package com.academy.ndvalkov.mediamonitoringapp.models;
 import com.orm.SugarRecord;
 
 public class MonitoringConfig extends SugarRecord {
+    private String sourceId;
     private String source;
     private String category;
     private String vendor;
@@ -14,18 +15,28 @@ public class MonitoringConfig extends SugarRecord {
 
     }
 
-    public MonitoringConfig(String source,
+    public MonitoringConfig(String sourceId,
+                            String source,
                             String category,
                             String vendor,
                             String primaryKeywords,
                             String secondaryKeywords,
                             String dateCreated) {
+        this.sourceId = sourceId;
         this.source = source;
         this.category = category;
         this.vendor = vendor;
         this.primaryKeywords = primaryKeywords;
         this.secondaryKeywords = secondaryKeywords;
         this.dateCreated = dateCreated;
+    }
+
+    public String getSourceId() {
+        return sourceId;
+    }
+
+    public void setSourceId(String sourceId) {
+        this.sourceId = sourceId;
     }
 
     public String getSource() {
