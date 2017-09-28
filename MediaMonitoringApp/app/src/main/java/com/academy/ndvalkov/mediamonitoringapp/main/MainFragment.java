@@ -142,8 +142,10 @@ public class MainFragment extends Fragment {
         List<String> primaryKeywords = extractKeywords(primaryFragment.getKeywords());
         List<String> secondaryKeywords = extractKeywords(secondaryFragment.getKeywords());
 
-        summaryFragment.setPrimaryKeywords(primaryKeywords);
-        summaryFragment.setSecondaryKeywords(secondaryKeywords);
+        summaryFragment.getPrimaryKeywords().clear();
+        summaryFragment.getPrimaryKeywords().addAll(primaryKeywords);
+        summaryFragment.getSecondaryKeywords().clear();
+        summaryFragment.getSecondaryKeywords().addAll(secondaryKeywords);
     }
 
     private List<String> extractKeywords(List<BatModel> batModels) {

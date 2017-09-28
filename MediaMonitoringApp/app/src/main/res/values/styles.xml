@@ -57,4 +57,13 @@
         <item name="android:textSize">@dimen/font_large</item>
     </style>
 
+    <!--TextView-->
+    <style name="HeaderTextView">
+        <item name="android:background">@color/secondaryColor</item>
+        <item name="android:textSize">@dimen/font_normal</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:gravity">center_horizontal|center_vertical</item>
+        <item name="android:padding">@dimen/spacing_small</item>
+    </style>
+
 </resources>

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -40,28 +41,68 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/main_hint_vendor"
-            android:textSize="@dimen/font_normal" />
+            android:textSize="@dimen/font_large" />
 
     </android.support.design.widget.TextInputLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:layout_below="@+id/container_vendor"
-        android:baselineAligned="false">
+        android:baselineAligned="false"
+        android:orientation="horizontal">
 
-        <ListView
-            android:id="@+id/lvPrimary"
+        <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:orientation="vertical">
 
-        <ListView
-            android:id="@+id/lvSecondary"
+            <TextView
+                android:id="@+id/tvHeaderPrimary"
+                style="@style/HeaderTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/main_tv_primary" />
+
+            <ListView
+                android:id="@+id/lvPrimary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:listSelector="@android:color/transparent"
+                android:scrollbars="none"
+                tools:listitem="@layout/support_simple_spinner_dropdown_item" />
+
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:src="@drawable/shape_divider_vertical" />
+
+        <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvHeaderSecondary"
+                style="@style/HeaderTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/main_tv_secondary" />
+
+            <ListView
+                android:id="@+id/lvSecondary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:listSelector="@android:color/transparent"
+                android:paddingBottom="@dimen/spacing_huge"
+                android:scrollbars="none"
+                tools:listitem="@layout/support_simple_spinner_dropdown_item" />
+
+        </LinearLayout>
 
     </LinearLayout>
 
@@ -72,6 +113,6 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:text="@string/main_btn_save"/>
+        android:text="@string/main_btn_save" />
 
 </RelativeLayout>

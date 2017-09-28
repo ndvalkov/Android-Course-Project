@@ -2,16 +2,21 @@ package com.academy.ndvalkov.mediamonitoringapp.main;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.academy.ndvalkov.mediamonitoringapp.R;
 import com.academy.ndvalkov.mediamonitoringapp.common.BusProvider;
 import com.academy.ndvalkov.mediamonitoringapp.common.events.UpdateSummaryEvent;
+import com.academy.ndvalkov.mediamonitoringapp.data.db.DbProvider;
+import com.academy.ndvalkov.mediamonitoringapp.models.MonitoringConfig;
 import com.academy.ndvalkov.mediamonitoringapp.models.NewsSource;
 import com.squareup.otto.Subscribe;
 
@@ -23,12 +28,17 @@ public class SummaryFragment extends Fragment {
     private static final String TAG = MainFragment.class.getSimpleName();
 
     private NewsSource mSelectedSource;
-    private List<String> mPrimaryKeywords;
-    private List<String> mSecondaryKeywords;
+    private List<String> mPrimaryKeywords = new ArrayList<>();
+    private List<String> mSecondaryKeywords = new ArrayList<>();
     private TextView mTvSource;
     private TextView mTvCategory;
     private ListView mLvPrimary;
     private ListView mLvSecondary;
+    private ArrayAdapter<String> mPrimAdapter;
+    private ArrayAdapter<String> mSecAdapter;
+    private Button mBtnSave;
+
+    private DbProvider mDbProvider;
 
     public NewsSource getSelectedSource() {
         return mSelectedSource;
@@ -56,6 +66,10 @@ public class SummaryFragment extends Fragment {
 
     public SummaryFragment() {
         // Required empty public constructor
+
+        // DI?
+        mDbProvider = DbProvider.getInstance();
+
     }
 
     @Override
@@ -73,42 +87,26 @@ public class SummaryFragment extends Fragment {
         // Register for events from other classes and threads
         BusProvider.getInstance().register(this);
 
-        mTvSource = (TextView)view.findViewById(R.id.tvSource);
-        mTvCategory = (TextView)view.findViewById(R.id.tvCategory);
-        mLvPrimary = (ListView)view.findViewById(R.id.lvPrimary);
-        mLvSecondary = (ListView)view.findViewById(R.id.lvSecondary);
+        mTvSource = (TextView) view.findViewById(R.id.tvSource);
+        mTvCategory = (TextView) view.findViewById(R.id.tvCategory);
+        mLvPrimary = (ListView) view.findViewById(R.id.lvPrimary);
+        mLvSecondary = (ListView) view.findViewById(R.id.lvSecondary);
+        mBtnSave = (Button) view.findViewById(R.id.btnSave);
 
-        List<String> items = new ArrayList<>();
-        items.add("Word 1ffffsss");
-        items.add("Word ffff2");
-        items.add("Word ff3");
-        items.add("Word ffff2");
-        items.add("Word ff3");
-        items.add("Word ffff2");
-        items.add("Word ff3");
+        mPrimAdapter = new ArrayAdapter<>(getActivity(),
+                android.R.layout.simple_list_item_1, mPrimaryKeywords);
+        mLvPrimary.setAdapter(mPrimAdapter);
 
-        List<String> items1 = new ArrayList<>();
-        items1.add("Sec Word fff1");
-        items1.add("Sec Word 2");
-        items1.add("Sec ffffWord 3");
+        mSecAdapter = new ArrayAdapter<>(getActivity(),
+                android.R.layout.simple_list_item_1, mSecondaryKeywords);
+        mLvSecondary.setAdapter(mSecAdapter);
 
-        ArrayAdapter<String> primAdapter = new ArrayAdapter<>(getActivity(),
-                android.R.layout.simple_list_item_1, items);
-        mLvPrimary.setAdapter(primAdapter);
-        ArrayAdapter<String> secAdapter = new ArrayAdapter<>(getActivity(),
-                android.R.layout.simple_list_item_1, items1);
-        mLvSecondary.setAdapter(secAdapter);
+        mBtnSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
-        View headerPrimary = inflater.inflate(R.layout.header_keywords, mLvPrimary, false);
-        TextView tvHeaderPrim = (TextView)headerPrimary.findViewById(R.id.tvHeader);
-        tvHeaderPrim.setText(getResources().getString(R.string.main_tv_primary));
-
-        View headerSecondary = inflater.inflate(R.layout.header_keywords, mLvSecondary, false);
-        TextView tvHeaderSec = (TextView)headerSecondary.findViewById(R.id.tvHeader);
-        tvHeaderSec.setText(getResources().getString(R.string.main_tv_secondary));
-
-        mLvPrimary.addHeaderView(headerPrimary);
-        mLvSecondary.addHeaderView(headerSecondary);
+            }
+        });
 
         return view;
     }
@@ -122,7 +120,7 @@ public class SummaryFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         try {
-            // mContext = getActivity();
+
         } catch (ClassCastException e) {
             e.printStackTrace();
         }
@@ -139,5 +137,21 @@ public class SummaryFragment extends Fragment {
         mTvSource.setText(mSelectedSource != null ? mSelectedSource.getName() : "Source");
         mTvCategory.setText(mSelectedSource != null ? mSelectedSource.getCategory() : "Category");
 
+        mPrimAdapter.notifyDataSetChanged();
+        mSecAdapter.notifyDataSetChanged();
+
+        // String[] prims = new String[mPrimaryKeywords.size()];
+        // String[] secs = new String[mSecondaryKeywords.size()];
+        MonitoringConfig mc = new MonitoringConfig("ddd",
+                "ddd",
+                "ddd",
+                TextUtils.join(" ", mPrimaryKeywords),
+                TextUtils.join(" ", mSecondaryKeywords),
+                "ddd");
+
+        // mDbProvider.saveConfig(mc);
+
+        List<MonitoringConfig> conf = mDbProvider.getAllConfigs();
+        Toast.makeText(getActivity(), "", Toast.LENGTH_SHORT).show();
     }
 }
