@@ -21,6 +21,21 @@
         android:src="@drawable/shape_divider_horizontal" />
 
     <Button
+        android:id="@+id/nav_aticles"
+        style="@style/NavButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/ic_articles"
+        android:drawableStart="@drawable/ic_articles"
+        android:onClick="startActivity"
+        android:text="@string/navigation.content.articles" />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/shape_divider_horizontal" />
+
+    <Button
         android:id="@+id/nav_profile"
         style="@style/NavButton"
         android:layout_width="match_parent"

@@ -23,6 +23,14 @@
         </activity>
 
         <activity
+            android:name=".articles.ArticlesActivity"
+            android:label="@string/title_activity_articles"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="stateHidden|adjustPan">
+
+        </activity>
+
+        <activity
             android:name=".auth.SignupActivity"
             android:label="@string/title_activity_signup"
             android:theme="@style/AppTheme.NoActionBar"

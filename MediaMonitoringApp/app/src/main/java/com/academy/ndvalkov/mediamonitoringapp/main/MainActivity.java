@@ -15,7 +15,7 @@ import com.academy.ndvalkov.mediamonitoringapp.common.events.NextActionHideEvent
 import com.squareup.otto.Subscribe;
 
 public class MainActivity extends BaseActivity {
-    private static final String TAG = MainFragment.class.getSimpleName();
+    private static final String TAG = MainActivity.class.getSimpleName();
 
     private MainFragment mMainFragment;
     private ImageButton mFilterButton;

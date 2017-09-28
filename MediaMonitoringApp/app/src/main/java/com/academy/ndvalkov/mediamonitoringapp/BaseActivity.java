@@ -20,6 +20,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import com.academy.ndvalkov.mediamonitoringapp.articles.ArticlesActivity;
 import com.academy.ndvalkov.mediamonitoringapp.auth.LoginActivity;
 import com.academy.ndvalkov.mediamonitoringapp.auth.ProfileActivity;
 import com.academy.ndvalkov.mediamonitoringapp.common.DialogFactory;
@@ -40,7 +41,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected FirebaseAuth auth;
     protected FirebaseUser user;
 
-    protected FirebaseAuth.AuthStateListener authListener  = new FirebaseAuth.AuthStateListener() {
+    protected FirebaseAuth.AuthStateListener authListener = new FirebaseAuth.AuthStateListener() {
         @Override
         public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
             user = firebaseAuth.getCurrentUser();
@@ -173,16 +174,12 @@ public abstract class BaseActivity extends AppCompatActivity {
             case R.id.nav_main:
                 new DelayActivityTransitionAsyncTask(MainActivity.class).execute();
                 break;
+            case R.id.nav_aticles:
+                new DelayActivityTransitionAsyncTask(ArticlesActivity.class).execute();
+                break;
             case R.id.nav_profile:
                 new DelayActivityTransitionAsyncTask(ProfileActivity.class).execute();
                 break;
-
-//            case R.id.articles:
-//                new DelayActivityTransitionAsyncTask(ArticlesActivity.class).execute();
-//                break;
-//            case R.id.profile:
-//                new DelayActivityTransitionAsyncTask(ProfileActivity.class).execute();
-//                break;
 //            case R.id.monitor:
 //                new DelayActivityTransitionAsyncTask(MonitorActivity.class).execute();
 //                break;
@@ -224,19 +221,15 @@ public abstract class BaseActivity extends AppCompatActivity {
                 startActivity(new Intent(getApplicationContext(), MainActivity.class));
                 overridePendingTransition(R.animator.enter, R.animator.exit);
                 finish();
-//            } else if (selectedActivity.equals(ArticlesActivity.class)) {
-//                startActivity(new Intent(getApplicationContext(), ArticlesActivity.class));
-//                overridePendingTransition(R.animator.enter, R.animator.exit);
-//                finish();
-//            } else if (selectedActivity.equals(ProfileActivity.class)) {
-//                startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
-//                overridePendingTransition(R.animator.enter, R.animator.exit);
-//                finish();
 //            } else if (selectedActivity.equals(MonitorActivity.class)) {
 //                startActivity(new Intent(getApplicationContext(), MonitorActivity.class));
 //                overridePendingTransition(R.animator.enter, R.animator.exit);
 //                finish();
 //            }
+            } else if (selectedActivity.equals(ArticlesActivity.class)) {
+                startActivity(new Intent(getApplicationContext(), ArticlesActivity.class));
+                overridePendingTransition(R.animator.enter, R.animator.exit);
+                finish();
             } else if (selectedActivity.equals(ProfileActivity.class)) {
                 startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
                 overridePendingTransition(R.animator.enter, R.animator.exit);
