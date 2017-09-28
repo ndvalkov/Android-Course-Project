@@ -42,7 +42,8 @@
     <string name="main_btn_save">Save</string>
     <string name="main_tv_primary">Primary</string>
     <string name="main_tv_secondary">Secondary</string>
-
+    <string name="main_tv_source">Source</string>
+    <string name="main_tv_category">Category</string>
 
     <!--Nav drawer-->
     <string name="navigation.action.open">Open navigation drawer</string>
@@ -55,6 +56,10 @@
 
     <!--Messages-->
     <string name="msg_app_exit">Are you sure you want to exit?</string>
+    <string name="msg_select_source">Please, select a news source</string>
+    <string name="msg_select_category">Please, select category</string>
+    <string name="msg_add_vendor">Please, add vendor name</string>
+    <string name="msg_config_saved">Configuration saved successfully!</string>
 
     <!--Models-->
     <string name="md_source_name">Name</string>
@@ -75,6 +80,5 @@
     <string name="button.ignore">Ignore</string>
     <string name="button.yes">Yes</string>
     <string name="button.no">No</string>
-
 
 </resources>

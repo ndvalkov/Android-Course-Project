@@ -4,115 +4,138 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <fr.castorflex.android.circularprogressbar.CircularProgressBar xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/progress"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_centerInParent="true"
+        android:indeterminate="true"
+        android:visibility="gone"
+        app:cpb_color="#FFee44"
+        app:cpb_colors="@array/progressColors"
+        app:cpb_max_sweep_angle="300"
+        app:cpb_min_sweep_angle="30"
+        app:cpb_rotation_speed="1.0"
+        app:cpb_stroke_width="4dp"
+        app:cpb_sweep_speed="1.0" />
+
     <RelativeLayout
-        android:id="@+id/container_source"
+        android:id="@+id/container_summary"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true">
+        android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/tvSource"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Source"
-            android:textSize="@dimen/font_normal" />
-
-        <TextView
-            android:id="@+id/tvCategory"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:background="@drawable/shape_label_rounded"
-            android:text="CATEGORY"
-            android:textColor="@color/secondaryColor"
-            android:textSize="@dimen/font_small" />
-
-    </RelativeLayout>
-
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/container_vendor"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/container_source"
-        android:layout_marginTop="@dimen/spacing_normal">
-
-        <EditText
-            android:id="@+id/etVendor"
+        <RelativeLayout
+            android:id="@+id/container_source"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/main_hint_vendor"
-            android:textSize="@dimen/font_large" />
-
-    </android.support.design.widget.TextInputLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/container_vendor"
-        android:baselineAligned="false"
-        android:orientation="horizontal">
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical">
+            android:layout_alignParentTop="true">
 
             <TextView
-                android:id="@+id/tvHeaderPrimary"
-                style="@style/HeaderTextView"
-                android:layout_width="match_parent"
+                android:id="@+id/tvSource"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/main_tv_primary" />
+                android:text="@string/main_tv_source"
+                android:textSize="@dimen/font_normal" />
 
-            <ListView
-                android:id="@+id/lvPrimary"
+            <TextView
+                android:id="@+id/tvCategory"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:background="@drawable/shape_label_rounded"
+                android:text="@string/main_tv_category"
+                android:textColor="@color/secondaryColor"
+                android:textSize="@dimen/font_small" />
+
+        </RelativeLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/container_vendor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/container_source"
+            android:layout_marginTop="@dimen/spacing_normal">
+
+            <EditText
+                android:id="@+id/etVendor"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:listSelector="@android:color/transparent"
-                android:scrollbars="none"
-                tools:listitem="@layout/support_simple_spinner_dropdown_item" />
+                android:hint="@string/main_hint_vendor"
+                android:textSize="@dimen/font_large" />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/container_vendor"
+            android:baselineAligned="false"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvHeaderPrimary"
+                    style="@style/HeaderTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/main_tv_primary" />
+
+                <ListView
+                    android:id="@+id/lvPrimary"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:listSelector="@android:color/transparent"
+                    android:scrollbars="none"
+                    tools:listitem="@layout/support_simple_spinner_dropdown_item" />
+
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:src="@drawable/shape_divider_vertical" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvHeaderSecondary"
+                    style="@style/HeaderTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/main_tv_secondary" />
+
+                <ListView
+                    android:id="@+id/lvSecondary"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:listSelector="@android:color/transparent"
+                    android:paddingBottom="@dimen/spacing_huge"
+                    android:scrollbars="none"
+                    tools:listitem="@layout/support_simple_spinner_dropdown_item" />
+
+            </LinearLayout>
 
         </LinearLayout>
 
-        <ImageView
+        <Button
+            android:id="@+id/btnSave"
+            style="@style/NormalButton.PrimaryPositiveButton"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:src="@drawable/shape_divider_vertical" />
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:text="@string/main_btn_save" />
 
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/tvHeaderSecondary"
-                style="@style/HeaderTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/main_tv_secondary" />
-
-            <ListView
-                android:id="@+id/lvSecondary"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:listSelector="@android:color/transparent"
-                android:paddingBottom="@dimen/spacing_huge"
-                android:scrollbars="none"
-                tools:listitem="@layout/support_simple_spinner_dropdown_item" />
-
-        </LinearLayout>
-
-    </LinearLayout>
-
-    <Button
-        android:id="@+id/btnSave"
-        style="@style/NormalButton.PrimaryPositiveButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:text="@string/main_btn_save" />
+    </RelativeLayout>
 
 </RelativeLayout>
