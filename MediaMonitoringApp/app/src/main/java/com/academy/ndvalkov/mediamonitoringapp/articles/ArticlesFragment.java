@@ -18,13 +18,19 @@ import com.academy.ndvalkov.mediamonitoringapp.R;
 import com.academy.ndvalkov.mediamonitoringapp.common.BusProvider;
 import com.academy.ndvalkov.mediamonitoringapp.common.DialogFactory;
 import com.academy.ndvalkov.mediamonitoringapp.common.ListUtils;
+import com.academy.ndvalkov.mediamonitoringapp.common.Notifications;
 import com.academy.ndvalkov.mediamonitoringapp.common.events.articles.OpenSelectEvent;
 import com.academy.ndvalkov.mediamonitoringapp.data.db.DbProvider;
+import com.academy.ndvalkov.mediamonitoringapp.data.services.DataService;
+import com.academy.ndvalkov.mediamonitoringapp.data.services.HttpDataService;
+import com.academy.ndvalkov.mediamonitoringapp.data.tasks.HttpTask;
+import com.academy.ndvalkov.mediamonitoringapp.models.Article;
 import com.academy.ndvalkov.mediamonitoringapp.models.MonitoringConfig;
 import com.farbod.labelledspinner.LabelledSpinner;
 import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
@@ -38,6 +44,8 @@ public class ArticlesFragment extends Fragment {
 
     private CircularProgressBar mProgress;
     private RelativeLayout mContainerArticles;
+    private List<String> mSources;
+    private List<String> mSourceIds;
 
     public ArticlesFragment() {
         // Required empty public constructor
@@ -61,7 +69,7 @@ public class ArticlesFragment extends Fragment {
         // Register for events from other classes and threads
         BusProvider.getInstance().register(this);
 
-        mProgress = (CircularProgressBar)view.findViewById(R.id.progress);
+        mProgress = (CircularProgressBar) view.findViewById(R.id.progress);
         mContainerArticles = (RelativeLayout) view.findViewById(R.id.container_articles);
 
         return view;
@@ -94,16 +102,12 @@ public class ArticlesFragment extends Fragment {
      */
     @Subscribe
     public void onArticlesSelectEvent(OpenSelectEvent ev) {
-        if(isAdded()){
+        if (isAdded()) {
             openSelectDialog();
         }
     }
 
     private void openSelectDialog() {
-
-        mProgress.setVisibility(View.VISIBLE);
-        mContainerArticles.setVisibility(View.GONE);
-
         final List<MonitoringConfig> configs = new ArrayList<>();
         new Thread(new Runnable() {
             @Override
@@ -113,18 +117,21 @@ public class ArticlesFragment extends Fragment {
                 new Handler(Looper.getMainLooper()).post(new Runnable() {
                     @Override
                     public void run() {
-                        mProgress.setVisibility(View.GONE);
-                        mContainerArticles.setVisibility(View.VISIBLE);
-
-                        List<String> sources = ListUtils.map(configs, new ListUtils.Map<MonitoringConfig, String>() {
+                        mSources = ListUtils.map(configs, new ListUtils.Map<MonitoringConfig, String>() {
                             @Override
                             public String mapItem(MonitoringConfig item) {
                                 return item.getSource();
                             }
                         });
 
-                        showDialog(sources);
+                        mSourceIds = ListUtils.map(configs, new ListUtils.Map<MonitoringConfig, String>() {
+                            @Override
+                            public String mapItem(MonitoringConfig item) {
+                                return item.getSourceId();
+                            }
+                        });
 
+                        showDialog(mSources);
                     }
                 });
             }
@@ -133,13 +140,11 @@ public class ArticlesFragment extends Fragment {
 
     private void showDialog(List<String> sources) {
         LayoutInflater inflater = getActivity().getLayoutInflater();
-        final LinearLayout contentView = (LinearLayout)inflater.inflate(R.layout.dialog_select_source, null, false);
+        final LinearLayout contentView = (LinearLayout) inflater.inflate(R.layout.dialog_select_source, null, false);
         final LabelledSpinner spinner = (LabelledSpinner) contentView.findViewById(R.id.spinSources);
 
         // remove duplicate entries
         spinner.setItemsArray(new ArrayList<>(new HashSet<>(sources)));
-
-
         spinner.setOnItemChosenListener(new LabelledSpinner.OnItemChosenListener() {
             @Override
             public void onItemChosen(View labelledSpinner, AdapterView<?> adapterView, View itemView, int position, long id) {
@@ -166,11 +171,51 @@ public class ArticlesFragment extends Fragment {
         dlg.findViewById(R.id.okButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getActivity(),
-                        spinner.getSpinner().getSelectedItem().toString(),
-                        Toast.LENGTH_SHORT).show();
+                String sourceName = spinner.getSpinner().getSelectedItem().toString();
+                int sourceIndex = mSources.indexOf(sourceName);
+                getArticles(mSourceIds.get(sourceIndex));
                 dlg.dismiss();
             }
         });
+    }
+
+    private void getArticles(String sourceId) {
+        mProgress.setVisibility(View.VISIBLE);
+        mContainerArticles.setVisibility(View.GONE);
+        String format = "https://newsapi.org/v1/articles?source=%s&sortBy=latest&apiKey=%s";
+        String apiKey = "76dcecb58f2b437a9c6beb9b0bad10fb";
+        String baseUrl = String.format(format, sourceId, apiKey);
+
+        DataService<Article> sourcesData = new HttpDataService<>(baseUrl, "articles", Article.class, Article[].class);
+        sourcesData.getAll(new HttpTask.OnHttpTaskResult<Article[]>() {
+            @Override
+            public void call(final Exception ex, Article[] result) {
+                final List<Article> newsSources = Arrays.asList(result);
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (ex != null) {
+                            Notifications.showNegative(getActivity(), ex.getMessage());
+                        } else {
+
+                            Toast.makeText(getActivity(), "", Toast.LENGTH_SHORT).show();
+//                            sources.addAll(newsSources);
+//                            all.addAll(newsSources);
+//                            mAdapter.notifyDataSetChanged();
+//
+//                            new Handler().postDelayed(new Runnable() {
+//                                @Override
+//                                public void run() {
+//                                    activateFilterActionButton();
+//                                }
+//                            }, 100);
+
+                            mProgress.setVisibility(View.GONE);
+                        }
+                    }
+                });
+            }
+        });
+
     }
 }

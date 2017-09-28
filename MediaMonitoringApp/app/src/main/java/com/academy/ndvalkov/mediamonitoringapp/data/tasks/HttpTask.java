@@ -18,6 +18,7 @@ public class HttpTask<T> extends AsyncTask<String, Boolean, String> {
     private final OkHttpClient okHttpClient;
     private final Class<T> klass;
     private Exception exception;
+    private String key;
 
     public HttpTask(Class<T> klass, OnHttpTaskResult<T> onHttpTaskResult) {
         this.onHttpTaskResult = onHttpTaskResult;
@@ -28,6 +29,8 @@ public class HttpTask<T> extends AsyncTask<String, Boolean, String> {
     @Override
     protected String doInBackground(String... params) {
         String url = params[0];
+        this.key = params[1];
+
         Request request = new Request.Builder()
                 .url(url)
                 .build();
@@ -50,7 +53,7 @@ public class HttpTask<T> extends AsyncTask<String, Boolean, String> {
 
         try {
             JSONObject jo = new JSONObject(json);
-            T result = gson.fromJson(jo.getString("sources"), this.getKlass());
+            T result = gson.fromJson(jo.getString(this.key), this.getKlass());
 
             this.getOnHttpTaskResult()
                     .call(this.getException(), result);

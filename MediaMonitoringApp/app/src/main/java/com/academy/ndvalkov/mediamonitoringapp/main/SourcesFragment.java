@@ -108,7 +108,7 @@ public class SourcesFragment extends Fragment {
         final ProgressBar progress = (CircularProgressBar) view.findViewById(R.id.progress);
         progress.setVisibility(View.VISIBLE);
 
-        DataService<NewsSource> sourcesData = new HttpDataService<>("https://newsapi.org/v1/sources?language=en", NewsSource.class, NewsSource[].class);
+        DataService<NewsSource> sourcesData = new HttpDataService<>("https://newsapi.org/v1/sources?language=en", "sources", NewsSource.class, NewsSource[].class);
         sourcesData.getAll(new HttpTask.OnHttpTaskResult<NewsSource[]>() {
             @Override
             public void call(final Exception ex, NewsSource[] result) {
