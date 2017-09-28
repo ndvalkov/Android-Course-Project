@@ -70,6 +70,7 @@
 
     <!--Dialogs-->
     <string name="dialog_title_filter">Filter</string>
+    <string name="dialog_title_select_source">Select Source</string>
     <string name="dialog_filter_category">by Category:</string>
     <string name="dialog_filter_name">News Source:</string>
     <string name="dialog_filter_hint_category">category</string>

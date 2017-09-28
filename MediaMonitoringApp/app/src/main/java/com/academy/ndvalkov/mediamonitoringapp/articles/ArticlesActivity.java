@@ -1,25 +1,26 @@
 package com.academy.ndvalkov.mediamonitoringapp.articles;
 
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.widget.ImageButton;
 
 import com.academy.ndvalkov.mediamonitoringapp.BaseActivity;
 import com.academy.ndvalkov.mediamonitoringapp.R;
 import com.academy.ndvalkov.mediamonitoringapp.common.BusProvider;
-import com.academy.ndvalkov.mediamonitoringapp.main.MainFragment;
+import com.academy.ndvalkov.mediamonitoringapp.common.events.articles.OpenSelectEvent;
 
 public class ArticlesActivity extends BaseActivity {
     private static final String TAG = ArticlesActivity.class.getSimpleName();
 
-    private MainFragment mArticlesFragment;
+    private ArticlesFragment mArticlesFragment;
     private ImageButton mConfigButton;
 
     private View.OnClickListener mToolbarButtonListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             switch (v.getId()) {
-                case R.id.action_filter:
+                case R.id.action_config:
                     openConfigDialog();
                     break;
                 default:
@@ -43,18 +44,18 @@ public class ArticlesActivity extends BaseActivity {
         mConfigButton = (ImageButton) findViewById(R.id.action_config);
         mConfigButton.setOnClickListener(mToolbarButtonListener);
 
-//        mMainFragment = new MainFragment();
-//
-//        FragmentTransaction trans = getSupportFragmentManager()
-//                .beginTransaction();
-//
-//        trans.replace(R.id.container_main, mMainFragment);
-//        trans.commit();
+        mArticlesFragment = new ArticlesFragment();
+
+        FragmentTransaction trans = getSupportFragmentManager()
+                .beginTransaction();
+
+        trans.replace(R.id.container_articles, mArticlesFragment);
+        trans.commit();
     }
 
     private void openConfigDialog() {
-//        if (mMainFragment.isAdded()) {
-//            BusProvider.getInstance().post(new FilterOpenEvent(true));
-//        }
+        if (mArticlesFragment.isAdded()) {
+            BusProvider.getInstance().post(new OpenSelectEvent(true));
+        }
     }
 }

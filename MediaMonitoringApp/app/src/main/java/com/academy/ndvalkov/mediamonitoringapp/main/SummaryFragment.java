@@ -18,7 +18,7 @@ import android.widget.TextView;
 import com.academy.ndvalkov.mediamonitoringapp.R;
 import com.academy.ndvalkov.mediamonitoringapp.common.BusProvider;
 import com.academy.ndvalkov.mediamonitoringapp.common.Notifications;
-import com.academy.ndvalkov.mediamonitoringapp.common.events.UpdateSummaryEvent;
+import com.academy.ndvalkov.mediamonitoringapp.common.events.main.UpdateSummaryEvent;
 import com.academy.ndvalkov.mediamonitoringapp.data.db.DbProvider;
 import com.academy.ndvalkov.mediamonitoringapp.models.MonitoringConfig;
 import com.academy.ndvalkov.mediamonitoringapp.models.NewsSource;

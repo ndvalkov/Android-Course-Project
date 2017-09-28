@@ -1,4 +1,4 @@
-package com.academy.ndvalkov.mediamonitoringapp.common.events;
+package com.academy.ndvalkov.mediamonitoringapp.common.events.main;
 
 /**
  * An event object that will be passed as a result to

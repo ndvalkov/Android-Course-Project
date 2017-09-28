@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.academy.ndvalkov.mediamonitoringapp.articles.ArticlesActivity">
+
+    <include layout="@layout/progress_circular"/>
+
+    <RelativeLayout
+        android:id="@+id/container_articles"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Articles" />
+
+    </RelativeLayout>
+
+</RelativeLayout>

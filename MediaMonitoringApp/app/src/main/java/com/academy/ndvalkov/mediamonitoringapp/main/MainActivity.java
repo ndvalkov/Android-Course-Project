@@ -8,10 +8,10 @@ import android.widget.ImageButton;
 import com.academy.ndvalkov.mediamonitoringapp.BaseActivity;
 import com.academy.ndvalkov.mediamonitoringapp.R;
 import com.academy.ndvalkov.mediamonitoringapp.common.BusProvider;
-import com.academy.ndvalkov.mediamonitoringapp.common.events.FilterActionActivateEvent;
-import com.academy.ndvalkov.mediamonitoringapp.common.events.FilterActionHideEvent;
-import com.academy.ndvalkov.mediamonitoringapp.common.events.FilterOpenEvent;
-import com.academy.ndvalkov.mediamonitoringapp.common.events.NextActionHideEvent;
+import com.academy.ndvalkov.mediamonitoringapp.common.events.main.FilterActionActivateEvent;
+import com.academy.ndvalkov.mediamonitoringapp.common.events.main.FilterActionHideEvent;
+import com.academy.ndvalkov.mediamonitoringapp.common.events.main.FilterOpenEvent;
+import com.academy.ndvalkov.mediamonitoringapp.common.events.main.NextActionHideEvent;
 import com.squareup.otto.Subscribe;
 
 public class MainActivity extends BaseActivity {

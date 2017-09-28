@@ -13,9 +13,9 @@ import com.academy.ndvalkov.mediamonitoringapp.BaseActivity;
 import com.academy.ndvalkov.mediamonitoringapp.R;
 import com.academy.ndvalkov.mediamonitoringapp.common.BusProvider;
 import com.academy.ndvalkov.mediamonitoringapp.common.ListUtils;
-import com.academy.ndvalkov.mediamonitoringapp.common.events.FilterActionHideEvent;
-import com.academy.ndvalkov.mediamonitoringapp.common.events.NextActionHideEvent;
-import com.academy.ndvalkov.mediamonitoringapp.common.events.UpdateSummaryEvent;
+import com.academy.ndvalkov.mediamonitoringapp.common.events.main.FilterActionHideEvent;
+import com.academy.ndvalkov.mediamonitoringapp.common.events.main.NextActionHideEvent;
+import com.academy.ndvalkov.mediamonitoringapp.common.events.main.UpdateSummaryEvent;
 import com.academy.ndvalkov.mediamonitoringapp.common.views.adapters.SourcesRVAdapter;
 import com.academy.ndvalkov.mediamonitoringapp.models.NewsSource;
 import com.yalantis.beamazingtoday.interfaces.BatModel;
@@ -26,7 +26,6 @@ public class MainFragment extends Fragment {
 
     private static final String TAG = MainFragment.class.getSimpleName();
 
-    private int mCurrentFragmentPosition;
     private ViewPager mPager;
     private ScreenSlidePagerAdapter mPagerAdapter;
     private String[] mTitles;
@@ -77,8 +76,6 @@ public class MainFragment extends Fragment {
 
             @Override
             public void onPageSelected(int position) {
-                // keep track of the current page
-                mCurrentFragmentPosition = position;
                 ((BaseActivity) getActivity()).setCustomToolbarTitle(mTitles[position]);
                 if (position == 0) {
                     BusProvider.getInstance().post(new FilterActionHideEvent(false));
