@@ -67,6 +67,11 @@
     <string name="md_source_description">Description</string>
     <string name="md_source_url">Url</string>
     <string name="md_source_category">Category</string>
+    <string name="md_article_title">Title</string>
+    <string name="md_article_author">Author</string>
+    <string name="md_article_description">Description</string>
+    <string name="md_article_url">Url</string>
+    <string name="md_article_date">Publish Date</string>
 
     <!--Dialogs-->
     <string name="dialog_title_filter">Filter</string>

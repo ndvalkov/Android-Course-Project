@@ -1,18 +1,20 @@
 package com.academy.ndvalkov.mediamonitoringapp.articles;
 
 import android.app.Dialog;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.academy.ndvalkov.mediamonitoringapp.R;
 import com.academy.ndvalkov.mediamonitoringapp.common.BusProvider;
@@ -20,6 +22,7 @@ import com.academy.ndvalkov.mediamonitoringapp.common.DialogFactory;
 import com.academy.ndvalkov.mediamonitoringapp.common.ListUtils;
 import com.academy.ndvalkov.mediamonitoringapp.common.Notifications;
 import com.academy.ndvalkov.mediamonitoringapp.common.events.articles.OpenSelectEvent;
+import com.academy.ndvalkov.mediamonitoringapp.common.views.adapters.ArticlesRVAdapter;
 import com.academy.ndvalkov.mediamonitoringapp.data.db.DbProvider;
 import com.academy.ndvalkov.mediamonitoringapp.data.services.DataService;
 import com.academy.ndvalkov.mediamonitoringapp.data.services.HttpDataService;
@@ -46,6 +49,10 @@ public class ArticlesFragment extends Fragment {
     private RelativeLayout mContainerArticles;
     private List<String> mSources;
     private List<String> mSourceIds;
+    private List<Article> mArticles;
+    private RecyclerView mRecyclerView;
+    private RecyclerView.Adapter mAdapter;
+    private RecyclerView.LayoutManager mLayoutManager;
 
     public ArticlesFragment() {
         // Required empty public constructor
@@ -71,6 +78,24 @@ public class ArticlesFragment extends Fragment {
 
         mProgress = (CircularProgressBar) view.findViewById(R.id.progress);
         mContainerArticles = (RelativeLayout) view.findViewById(R.id.container_articles);
+
+
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.rvArticles);
+
+        // use this setting to improve performance if you know that changes
+        // in content do not change the layout size of the RecyclerView
+        mRecyclerView.setHasFixedSize(false);
+
+        // use a linear layout manager
+        mLayoutManager = new LinearLayoutManager(getActivity());
+        mRecyclerView.setLayoutManager(mLayoutManager);
+
+        mRecyclerView.addItemDecoration(new VerticalSpacingDecoration((int) getResources()
+                .getDimension(R.dimen.activity_vertical_margin)));
+
+        mArticles = new ArrayList<>();
+        mAdapter = new ArticlesRVAdapter(mArticles);
+        mRecyclerView.setAdapter(mAdapter);
 
         return view;
     }
@@ -182,7 +207,7 @@ public class ArticlesFragment extends Fragment {
     private void getArticles(String sourceId) {
         mProgress.setVisibility(View.VISIBLE);
         mContainerArticles.setVisibility(View.GONE);
-        String format = "https://newsapi.org/v1/articles?source=%s&sortBy=latest&apiKey=%s";
+        String format = "https://newsapi.org/v1/articles?source=%s&apiKey=%s";
         String apiKey = "76dcecb58f2b437a9c6beb9b0bad10fb";
         String baseUrl = String.format(format, sourceId, apiKey);
 
@@ -190,32 +215,37 @@ public class ArticlesFragment extends Fragment {
         sourcesData.getAll(new HttpTask.OnHttpTaskResult<Article[]>() {
             @Override
             public void call(final Exception ex, Article[] result) {
-                final List<Article> newsSources = Arrays.asList(result);
+                final List<Article> articles = Arrays.asList(result);
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         if (ex != null) {
                             Notifications.showNegative(getActivity(), ex.getMessage());
                         } else {
-
-                            Toast.makeText(getActivity(), "", Toast.LENGTH_SHORT).show();
-//                            sources.addAll(newsSources);
-//                            all.addAll(newsSources);
-//                            mAdapter.notifyDataSetChanged();
-//
-//                            new Handler().postDelayed(new Runnable() {
-//                                @Override
-//                                public void run() {
-//                                    activateFilterActionButton();
-//                                }
-//                            }, 100);
+                            mArticles.clear();
+                            mArticles.addAll(articles);
+                            mAdapter.notifyDataSetChanged();
 
                             mProgress.setVisibility(View.GONE);
+                            mContainerArticles.setVisibility(View.VISIBLE);
                         }
                     }
                 });
             }
         });
+    }
 
+    private class VerticalSpacingDecoration extends RecyclerView.ItemDecoration {
+
+        private int spacing;
+
+        public VerticalSpacingDecoration(int spacing) {
+            this.spacing = spacing;
+        }
+
+        @Override
+        public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+            outRect.bottom = spacing;
+        }
     }
 }

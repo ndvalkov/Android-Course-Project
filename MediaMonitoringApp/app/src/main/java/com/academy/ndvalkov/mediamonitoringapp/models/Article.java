@@ -6,10 +6,11 @@ public class Article implements Serializable {
     public Article() {
     }
 
-    public Article(String author, String title, String description, String urlToImage, String publishedAt) {
+    public Article(String author, String title, String description, String url, String urlToImage, String publishedAt) {
         this.author = author;
         this.title = title;
         this.description = description;
+        this.url = url;
         this.urlToImage = urlToImage;
         this.publishedAt = publishedAt;
     }
@@ -17,6 +18,7 @@ public class Article implements Serializable {
     private String author;
     private String title;
     private String description;
+    private String url;
     private String urlToImage;
     private String publishedAt;
 
@@ -42,6 +44,14 @@ public class Article implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 
     public String getUrlToImage() {
