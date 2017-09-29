@@ -21,6 +21,8 @@ public class MonitorFragment extends Fragment {
     private final DbProvider mDbProvider;
 
     private BottomNavigationView mBottomNavigationView;
+    private Fragment mWorkspaceFragment;
+    private Fragment mResultsFragment;
 
     public MonitorFragment() {
         // Required empty public constructor
@@ -49,8 +51,11 @@ public class MonitorFragment extends Fragment {
         // load Workspace first
         if (savedInstanceState == null) {
             FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
-            Fragment workspaceFragment = new WorkspaceFragment();
-            transaction.replace(R.id.container_monitor, workspaceFragment).commit();
+            mWorkspaceFragment = new WorkspaceFragment();
+            // transaction.add(R.id.container_monitor, workspaceFragment).commit();
+            transaction.add(R.id.container_monitor, mWorkspaceFragment)
+                    .addToBackStack(null)
+                    .commit();
         }
 
         mBottomNavigationView.setOnNavigationItemSelectedListener(
@@ -67,12 +72,40 @@ public class MonitorFragment extends Fragment {
 
                         switch (item.getItemId()) {
                             case R.id.action_workspace:
-                                Fragment workspaceFragment = new WorkspaceFragment();
-                                transaction.replace(R.id.container_monitor, workspaceFragment).commit();
+                                if (mResultsFragment != null) {
+                                    transaction.hide(mResultsFragment);
+                                }
+
+                                if (mWorkspaceFragment == null) {
+                                    mWorkspaceFragment = new WorkspaceFragment();
+                                    transaction.add(R.id.container_monitor, mWorkspaceFragment);
+                                } else {
+                                    transaction.show(mWorkspaceFragment);
+                                }
+
+                                transaction.commit();
+
+//                                Fragment workspaceFragment = new WorkspaceFragment();
+//                                transaction.replace(R.id.container_monitor, workspaceFragment)
+//                                        .commit();
                                 break;
                             case R.id.action_results:
-                                Fragment resultsFragment = new ResultsFragment();
-                                transaction.replace(R.id.container_monitor, resultsFragment).commit();
+                                if (mWorkspaceFragment != null) {
+                                    transaction.hide(mWorkspaceFragment);
+                                }
+
+                                if (mResultsFragment == null) {
+                                    mResultsFragment = new ResultsFragment();
+                                    transaction.add(R.id.container_monitor, mResultsFragment);
+                                } else {
+                                    transaction.show(mResultsFragment);
+                                }
+
+                                transaction.commit();
+
+//                                Fragment resultsFragment = new ResultsFragment();
+//                                transaction.replace(R.id.container_monitor, resultsFragment)
+//                                        .commit();
                                 break;
                         }
                         return true;
