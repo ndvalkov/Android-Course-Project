@@ -91,4 +91,8 @@
     <string name="button.yes">Yes</string>
     <string name="button.no">No</string>
 
+    <!--Bottom navigation-->
+    <string name="bottom_nav_workspace">Workspace</string>
+    <string name="bottom_nav_results">Results</string>
+
 </resources>

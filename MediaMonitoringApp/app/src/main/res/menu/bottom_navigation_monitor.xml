@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_workspace"
+        android:enabled="true"
+        android:icon="@drawable/ic_workspace"
+        android:title="@string/bottom_nav_workspace"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_results"
+        android:enabled="true"
+        android:icon="@drawable/ic_results"
+        android:title="@string/bottom_nav_results"
+        app:showAsAction="ifRoom" />
+</menu>
