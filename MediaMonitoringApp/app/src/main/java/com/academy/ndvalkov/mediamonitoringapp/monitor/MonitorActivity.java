@@ -1,7 +1,12 @@
 package com.academy.ndvalkov.mediamonitoringapp.monitor;
 
+/**
+ * NOT USING THE SUPPORT FRAGMENTS! Animations.
+ * // TODO: Reconsider, consistency/compatibility?
+ */
+
+import android.app.FragmentTransaction;
 import android.os.Bundle;
-import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.widget.ImageButton;
 
@@ -47,7 +52,7 @@ public class MonitorActivity extends BaseActivity {
 
         mMonitorFragment = new MonitorFragment();
 
-        FragmentTransaction trans = getSupportFragmentManager()
+        FragmentTransaction trans = getFragmentManager()
                 .beginTransaction();
 
         trans.replace(R.id.container_monitor, mMonitorFragment);

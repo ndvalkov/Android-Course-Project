@@ -1,15 +1,18 @@
 package com.academy.ndvalkov.mediamonitoringapp.monitor;
 
 import android.app.Dialog;
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.support.v4.app.Fragment;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -22,7 +25,6 @@ import com.academy.ndvalkov.mediamonitoringapp.common.DialogFactory;
 import com.academy.ndvalkov.mediamonitoringapp.common.ListUtils;
 import com.academy.ndvalkov.mediamonitoringapp.common.Notifications;
 import com.academy.ndvalkov.mediamonitoringapp.common.events.articles.OpenSelectEvent;
-import com.academy.ndvalkov.mediamonitoringapp.common.views.adapters.ArticlesRVAdapter;
 import com.academy.ndvalkov.mediamonitoringapp.data.db.DbProvider;
 import com.academy.ndvalkov.mediamonitoringapp.data.services.DataService;
 import com.academy.ndvalkov.mediamonitoringapp.data.services.HttpDataService;
@@ -54,6 +56,8 @@ public class MonitorFragment extends Fragment {
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
 
+    private BottomNavigationView mBottomNavigationView;
+
     public MonitorFragment() {
         // Required empty public constructor
 
@@ -77,24 +81,58 @@ public class MonitorFragment extends Fragment {
         BusProvider.getInstance().register(this);
 
         mProgress = (CircularProgressBar) view.findViewById(R.id.progress);
+        mBottomNavigationView =  (BottomNavigationView) view.findViewById(R.id.bottom_navigation);
 
-        mRecyclerView = (RecyclerView) view.findViewById(R.id.rvArticles);
-        mContainerArticles = (RelativeLayout) view.findViewById(R.id.container_articles);
+        // load Workspace first
+        if (savedInstanceState == null) {
+            FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+            Fragment workspaceFragment = new WorkspaceFragment();
+            transaction.replace(R.id.container_monitor, workspaceFragment).commit();
+        }
 
-        // use this setting to improve performance if you know that changes
-        // in content do not change the layout size of the RecyclerView
-        mRecyclerView.setHasFixedSize(false);
+        mBottomNavigationView.setOnNavigationItemSelectedListener(
+                new BottomNavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                        FragmentTransaction transaction = getChildFragmentManager()
+                                .beginTransaction()
+                                .setCustomAnimations(
+                                        R.animator.card_flip_right_in,
+                                        R.animator.card_flip_right_out,
+                                        R.animator.card_flip_left_in,
+                                        R.animator.card_flip_left_out);
 
-        // use a linear layout manager
-        mLayoutManager = new LinearLayoutManager(getActivity());
-        mRecyclerView.setLayoutManager(mLayoutManager);
+                        switch (item.getItemId()) {
+                            case R.id.action_workspace:
+                                Fragment workspaceFragment = new WorkspaceFragment();
+                                transaction.replace(R.id.container_monitor, workspaceFragment).commit();
+                                break;
+                            case R.id.action_results:
+                                Fragment resultsFragment = new ResultsFragment();
+                                transaction.replace(R.id.container_monitor, resultsFragment).commit();
+                                break;
+                        }
+                        return true;
+                    }
+                });
 
-        mRecyclerView.addItemDecoration(new VerticalSpacingDecoration((int) getResources()
-                .getDimension(R.dimen.activity_vertical_margin)));
-
-        mArticles = new ArrayList<>();
-        mAdapter = new ArticlesRVAdapter(mArticles);
-        mRecyclerView.setAdapter(mAdapter);
+//        mRecyclerView = (RecyclerView) view.findViewById(R.id.rvArticles);
+//        mContainerArticles = (RelativeLayout) view.findViewById(R.id.container_articles);
+//
+//        // use this setting to improve performance if you know that changes
+//        // in content do not change the layout size of the RecyclerView
+//        mRecyclerView.setHasFixedSize(false);
+//
+//        // use a linear layout manager
+//        mLayoutManager = new LinearLayoutManager(getActivity());
+//        mRecyclerView.setLayoutManager(mLayoutManager);
+//
+//        mRecyclerView.addItemDecoration(new VerticalSpacingDecoration((int) getResources()
+//                .getDimension(R.dimen.activity_vertical_margin)));
+//
+//        mArticles = new ArrayList<>();
+//        mAdapter = new ArticlesRVAdapter(mArticles);
+//        mRecyclerView.setAdapter(mAdapter);
 
         return view;
     }
@@ -124,9 +162,7 @@ public class MonitorFragment extends Fragment {
 
 //    @Override
 //    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-//        Fragment sourcesFragment = new SourcesFragment();
-//        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
-//        transaction.replace(R.id.container_sources, sourcesFragment).commit();
+
 //    }
 
     private void openSelectDialog() {
