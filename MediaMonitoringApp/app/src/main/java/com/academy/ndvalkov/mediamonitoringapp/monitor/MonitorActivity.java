@@ -13,7 +13,7 @@ import android.widget.ImageButton;
 import com.academy.ndvalkov.mediamonitoringapp.BaseActivity;
 import com.academy.ndvalkov.mediamonitoringapp.R;
 import com.academy.ndvalkov.mediamonitoringapp.common.BusProvider;
-import com.academy.ndvalkov.mediamonitoringapp.common.events.articles.OpenSelectEvent;
+import com.academy.ndvalkov.mediamonitoringapp.common.events.monitor.OpenMonitorConfigEvent;
 
 public class MonitorActivity extends BaseActivity {
 
@@ -61,7 +61,7 @@ public class MonitorActivity extends BaseActivity {
 
     public void openMonitorDialog() {
         if (mMonitorFragment.isAdded()) {
-            BusProvider.getInstance().post(new OpenSelectEvent(true));
+            BusProvider.getInstance().post(new OpenMonitorConfigEvent(true));
         }
     }
 }

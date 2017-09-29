@@ -47,6 +47,13 @@
     <string name="main_tv_source">Source</string>
     <string name="main_tv_category">Category</string>
 
+    <!--Values related to Monitor-->
+    <string name="monitor_tv_vendor">Vendor</string>
+    <string name="monitor_tv_source">Source</string>
+    <string name="monitor_btn_process">Process</string>
+    <string name="monitor_tv_primary">Primary</string>
+    <string name="monitor_tv_secondary">Secondary</string>
+
     <!--Nav drawer-->
     <string name="navigation.action.open">Open navigation drawer</string>
     <string name="navigation.action.close">Close navigation drawer</string>
@@ -94,5 +101,6 @@
     <!--Bottom navigation-->
     <string name="bottom_nav_workspace">Workspace</string>
     <string name="bottom_nav_results">Results</string>
+
 
 </resources>

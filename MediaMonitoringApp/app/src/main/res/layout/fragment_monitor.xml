@@ -6,32 +6,10 @@
     android:layout_height="match_parent"
     tools:context=".monitor.MonitorActivity">
 
-    <include layout="@layout/progress_circular" />
-
     <FrameLayout
         android:id="@+id/container_monitor"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
-
-    <!--<TextView-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_margin="@dimen/activity_horizontal_margin"-->
-        <!--android:text="Monitor"/>-->
-
-    <!--<RelativeLayout-->
-        <!--android:id="@+id/container_articles"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:layout_margin="@dimen/activity_horizontal_margin">-->
-
-        <!--<android.support.v7.widget.RecyclerView-->
-            <!--android:id="@+id/rvArticles"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:scrollbars="vertical" />-->
-
-    <!--</RelativeLayout>-->
 
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/bottom_navigation"

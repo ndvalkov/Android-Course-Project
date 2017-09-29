@@ -3,21 +3,38 @@
     xmlns:ls="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="@dimen/spacing_normal"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="@dimen/spacing_normal">
 
-    <LinearLayout
+
+    <com.farbod.labelledspinner.LabelledSpinner
+        android:id="@+id/spinConfigs"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        ls:labelText="@string/dialog_select_config"
+        ls:widgetColor="#F44336" />
 
-        <com.farbod.labelledspinner.LabelledSpinner
-            android:id="@+id/spinConfigs"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            ls:labelText="@string/dialog_select_config"
-            ls:widgetColor="#F44336" />
+    <TextView
+        android:id="@+id/tvSource"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/monitor_tv_source"/>
 
-    </LinearLayout>
+    <TextView
+        android:id="@+id/tvPrimary"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/monitor_tv_primary"
+        android:maxLines="3"
+        android:scrollbars="vertical"/>
+
+    <TextView
+        android:id="@+id/tvSecondary"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/monitor_tv_secondary"
+        android:maxLines="3"
+        android:scrollbars="vertical"/>
+
 
 </LinearLayout>

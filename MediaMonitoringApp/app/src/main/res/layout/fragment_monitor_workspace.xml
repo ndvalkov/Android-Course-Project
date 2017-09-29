@@ -3,10 +3,54 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
+    <include layout="@layout/progress_circular" />
+
+    <RelativeLayout
+        android:id="@+id/container_articles"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rvArticles"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="vertical" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/container_config_info"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Worpsace"
-        android:layout_centerInParent="true"/>
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:gravity="end"
+        android:orientation="vertical"
+        android:padding="@dimen/spacing_small">
+
+        <TextView
+            android:id="@+id/tvVendor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/shape_label_rounded"
+            android:text="@string/monitor_tv_vendor" />
+
+        <TextView
+            android:id="@+id/tvSource"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_normal"
+            android:background="@drawable/shape_label_rounded"
+            android:text="@string/monitor_tv_source" />
+
+        <Button
+            android:id="@+id/btnProcess"
+            style="@style/NormalButton.SecondaryButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_normal"
+            android:text="@string/monitor_btn_process" />
+
+    </LinearLayout>
 
 </RelativeLayout>
