@@ -6,7 +6,9 @@ import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -31,6 +33,7 @@ import com.academy.ndvalkov.mediamonitoringapp.data.tasks.HttpTask;
 import com.academy.ndvalkov.mediamonitoringapp.models.Article;
 import com.academy.ndvalkov.mediamonitoringapp.models.MonitoringConfig;
 import com.farbod.labelledspinner.LabelledSpinner;
+import com.konifar.fab_transformation.FabTransformation;
 import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
@@ -55,6 +58,11 @@ public class WorkspaceFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
+    private FloatingActionButton mFabProcess;
+    private boolean mIsProcessHidden;
+    private LinearLayout mContainerProcess;
+    private View overlay;
+    private CardView sheet;
 
     public WorkspaceFragment() {
         // Required empty public constructor
@@ -81,6 +89,42 @@ public class WorkspaceFragment extends Fragment {
         mRecyclerView = (RecyclerView) view.findViewById(R.id.rvArticles);
         mContainerArticles = (RelativeLayout) view.findViewById(R.id.container_articles);
         mProgress = (CircularProgressBar) view.findViewById(R.id.progress);
+        // mContainerProcess = (LinearLayout) view.findViewById(R.id.container_process);
+        mFabProcess = (FloatingActionButton) view.findViewById(R.id.fabProcess);
+        sheet = (CardView) view.findViewById(R.id.sheet);
+
+        sheet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mFabProcess.getVisibility() != View.VISIBLE) {
+                    FabTransformation.with(mFabProcess).transformFrom(sheet);
+                }
+            }
+        });
+
+        mFabProcess.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mFabProcess.getVisibility() == View.VISIBLE) {
+                    FabTransformation.with(mFabProcess).transformTo(sheet);
+                }
+            }
+        });
+//        mFabProcess.bringToFront();
+//        mFabProcess.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if (mIsProcessHidden) {
+//                    FabTransformation.with(mFabProcess)
+//                            .transformTo(mContainerProcess);
+//                    mIsProcessHidden = false;
+//                } else {
+//                    FabTransformation.with(mFabProcess)
+//                            .transformFrom(mContainerProcess);
+//                    mIsProcessHidden = true;
+//                }
+//            }
+//        });
 
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView

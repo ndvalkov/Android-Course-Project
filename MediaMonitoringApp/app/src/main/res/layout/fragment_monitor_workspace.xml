@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:card_view="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -18,39 +20,68 @@
 
     </RelativeLayout>
 
-    <LinearLayout
-        android:id="@+id/container_config_info"
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fabProcess"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentTop="true"
-        android:gravity="end"
-        android:orientation="vertical"
-        android:padding="@dimen/spacing_small">
+        android:layout_marginEnd="@dimen/spacing_normal"
+        android:src="@drawable/ic_monitor"
+        android:tint="@color/white"
+        app:borderWidth="0dp" />
 
-        <TextView
-            android:id="@+id/tvVendor"
+    <io.codetail.widget.RevealFrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true">
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/sheet"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/shape_label_rounded"
-            android:text="@string/monitor_tv_vendor" />
+            android:layout_marginEnd="@dimen/spacing_normal"
+            android:visibility="invisible"
+            app:cardElevation="2dp">
 
-        <TextView
-            android:id="@+id/tvSource"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/spacing_normal"
-            android:background="@drawable/shape_label_rounded"
-            android:text="@string/monitor_tv_source" />
+            <LinearLayout
+                android:id="@+id/container_config_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentTop="true"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                android:padding="@dimen/spacing_small">
 
-        <Button
-            android:id="@+id/btnProcess"
-            style="@style/NormalButton.SecondaryButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/spacing_normal"
-            android:text="@string/monitor_btn_process" />
+                <TextView
+                    android:id="@+id/tvVendor"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/monitor_tv_vendor" />
 
-    </LinearLayout>
+                <TextView
+                    android:id="@+id/tvSource"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_normal"
+                    android:text="@string/monitor_tv_source" />
+
+                <Button
+                    android:id="@+id/btnProcess"
+                    style="@android:style/Widget.Material.Button.Borderless.Colored"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_normal"
+                    android:text="@string/monitor_btn_process"
+                    android:textColor="@color/primaryLightColor" />
+
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
+
+    </io.codetail.widget.RevealFrameLayout>
+
 
 </RelativeLayout>
