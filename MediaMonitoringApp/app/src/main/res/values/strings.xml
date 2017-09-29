@@ -8,6 +8,7 @@
     <string name="title_activity_reset_password">ResetPassword</string>
     <string name="title_activity_login">Sign in</string>
     <string name="title_activity_articles">Articles</string>
+    <string name="title_activity_monitor">Monitor</string>
 
     <!--Values related to Login and Registration with Firebase-->
     <string name="action_sign_in_short">Register</string>
@@ -81,6 +82,7 @@
     <string name="dialog_filter_hint_name">name</string>
     <string name="dialog_title_select_source">Select Source</string>
     <string name="dialog_select_source">Select config source</string>
+    <string name="dialog_select_config">Select monitoring config</string>
 
     <string name="button.cancel">Cancel</string>
     <string name="button.positive">OK</string>

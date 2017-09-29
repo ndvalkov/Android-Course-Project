@@ -36,6 +36,21 @@
         android:src="@drawable/shape_divider_horizontal" />
 
     <Button
+        android:id="@+id/nav_monitor"
+        style="@style/NavButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/ic_monitor"
+        android:drawableStart="@drawable/ic_monitor"
+        android:onClick="startActivity"
+        android:text="@string/navigation.content.monitor" />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/shape_divider_horizontal" />
+
+    <Button
         android:id="@+id/nav_profile"
         style="@style/NavButton"
         android:layout_width="match_parent"

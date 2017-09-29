@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/spacing_small"
+    tools:background="@color/primaryDarkColor">
+
+    <TextView
+        android:id="@+id/title_monitor"
+        style="@android:style/TextAppearance.Material"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:layout_alignParentEnd="true"
+        tools:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:text="@string/title_activity_monitor"
+        android:textColor="@color/secondaryTextColor"
+        android:textSize="@dimen/font_normal"
+        tools:background="@color/secondaryLightColor"
+        android:textAllCaps="true" />
+
+    <ImageButton
+        android:id="@+id/action_monitor"
+        style="@android:style/Widget.Holo.Button.Borderless"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:src="@drawable/ic_settings"/>
+
+</RelativeLayout>

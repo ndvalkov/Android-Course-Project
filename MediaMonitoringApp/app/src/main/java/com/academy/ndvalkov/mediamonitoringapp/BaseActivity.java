@@ -25,6 +25,7 @@ import com.academy.ndvalkov.mediamonitoringapp.auth.LoginActivity;
 import com.academy.ndvalkov.mediamonitoringapp.auth.ProfileActivity;
 import com.academy.ndvalkov.mediamonitoringapp.common.DialogFactory;
 import com.academy.ndvalkov.mediamonitoringapp.main.MainActivity;
+import com.academy.ndvalkov.mediamonitoringapp.monitor.MonitorActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -177,12 +178,12 @@ public abstract class BaseActivity extends AppCompatActivity {
             case R.id.nav_aticles:
                 new DelayActivityTransitionAsyncTask(ArticlesActivity.class).execute();
                 break;
+            case R.id.nav_monitor:
+                new DelayActivityTransitionAsyncTask(MonitorActivity.class).execute();
+                break;
             case R.id.nav_profile:
                 new DelayActivityTransitionAsyncTask(ProfileActivity.class).execute();
                 break;
-//            case R.id.monitor:
-//                new DelayActivityTransitionAsyncTask(MonitorActivity.class).execute();
-//                break;
         }
     }
 
@@ -221,13 +222,12 @@ public abstract class BaseActivity extends AppCompatActivity {
                 startActivity(new Intent(getApplicationContext(), MainActivity.class));
                 overridePendingTransition(R.animator.enter, R.animator.exit);
                 finish();
-//            } else if (selectedActivity.equals(MonitorActivity.class)) {
-//                startActivity(new Intent(getApplicationContext(), MonitorActivity.class));
-//                overridePendingTransition(R.animator.enter, R.animator.exit);
-//                finish();
-//            }
             } else if (selectedActivity.equals(ArticlesActivity.class)) {
                 startActivity(new Intent(getApplicationContext(), ArticlesActivity.class));
+                overridePendingTransition(R.animator.enter, R.animator.exit);
+                finish();
+            } else if (selectedActivity.equals(MonitorActivity.class)) {
+                startActivity(new Intent(getApplicationContext(), MonitorActivity.class));
                 overridePendingTransition(R.animator.enter, R.animator.exit);
                 finish();
             } else if (selectedActivity.equals(ProfileActivity.class)) {
