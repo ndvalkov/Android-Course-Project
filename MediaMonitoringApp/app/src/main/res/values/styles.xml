@@ -66,4 +66,15 @@
         <item name="android:padding">@dimen/spacing_small</item>
     </style>
 
+    <style name="LinkTextView">
+        <item name="android:background">@drawable/shape_border_bottom</item>
+        <item name="android:clickable">true</item>
+        <item name="android:padding">@dimen/spacing_normal</item>
+        <item name="android:textColor">@color/secondaryLightColor</item>
+        <item name="android:textSize">@dimen/font_normal</item>
+    </style>
+
+
+
+
 </resources>

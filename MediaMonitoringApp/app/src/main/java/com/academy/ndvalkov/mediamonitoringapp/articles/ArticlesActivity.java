@@ -53,7 +53,7 @@ public class ArticlesActivity extends BaseActivity {
         trans.commit();
     }
 
-    private void openConfigDialog() {
+    public void openConfigDialog() {
         if (mArticlesFragment.isAdded()) {
             BusProvider.getInstance().post(new OpenSelectEvent(true));
         }

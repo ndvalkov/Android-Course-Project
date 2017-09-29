@@ -112,8 +112,7 @@ public class ArticlesFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         try {
-            // mContext = getActivity();
-
+            ((ArticlesActivity)getActivity()).openConfigDialog();
         } catch (ClassCastException e) {
             e.printStackTrace();
         }
@@ -190,8 +189,16 @@ public class ArticlesFragment extends Fragment {
         dlgParams.setTitle(getString(R.string.dialog_title_select_source))
                 .setIcon(ContextCompat.getDrawable(getActivity(), R.drawable.ic_notify))
                 .setContentWidget(contentView)
-                .setOKButton(true);
+                .setOKButton(true)
+                .setCancelButton(true);
         final Dialog dlg = new DialogFactory(getActivity()).createDialog(dlgParams);
+
+        dlg.findViewById(R.id.cancelButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dlg.dismiss();
+            }
+        });
 
         dlg.findViewById(R.id.okButton).setOnClickListener(new View.OnClickListener() {
             @Override

@@ -1,6 +1,8 @@
 package com.academy.ndvalkov.mediamonitoringapp.common.views.adapters;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.Spanned;
@@ -8,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.academy.ndvalkov.mediamonitoringapp.R;
@@ -15,8 +18,6 @@ import com.academy.ndvalkov.mediamonitoringapp.models.Article;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
-
-import fr.castorflex.android.circularprogressbar.CircularProgressBar;
 
 public class ArticlesRVAdapter extends
         RecyclerView.Adapter<ArticlesRVAdapter.MyViewHolder> {
@@ -33,7 +34,7 @@ public class ArticlesRVAdapter extends
         public TextView tvUrl;
         public TextView tvDate;
         public ImageView ivFeatured;
-        public CircularProgressBar progress;
+        public ProgressBar progress;
 
         public MyViewHolder(View view) {
             super(view);
@@ -43,7 +44,7 @@ public class ArticlesRVAdapter extends
             tvUrl = (TextView) view.findViewById(R.id.tvUrl);
             tvDate = (TextView) view.findViewById(R.id.tvDate);
             ivFeatured = (ImageView) view.findViewById(R.id.ivFeatured);
-            progress = (CircularProgressBar) view.findViewById(R.id.progress);
+            progress = (ProgressBar) view.findViewById(R.id.progress);
         }
     }
 
@@ -53,22 +54,30 @@ public class ArticlesRVAdapter extends
 
     @Override
     public void onBindViewHolder(final MyViewHolder holder, int position) {
-        Article article = articlesList.get(position);
+       final Article article = articlesList.get(position);
         holder.tvTitle.setText(article.getTitle());
         holder.tvAuthor.setText(article.getAuthor());
         holder.tvDescription.setText(article.getDescription());
-        String format = "<a href=\"%s\">Link</a>";
-        String htmlString = String.format(format, article.getUrl());
-        holder.tvUrl.setText(fromHtml(htmlString));
         holder.tvDate.setText(article.getPublishedAt());
-
+//        String format = "<a href=\"%s\">Link</a>";
+//        String htmlString = String.format(format, article.getUrl());
+//        holder.tvUrl.setText(fromHtml(htmlString));
         final Context context = holder.tvDate.getContext();
+
+        holder.tvUrl.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String url = article.getUrl();
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse(url));
+                context.startActivity(i);
+            }
+        });
+
         holder.progress.setVisibility(View.VISIBLE);
         Picasso.with(context)
                 .load(article.getUrlToImage())
                 .error(R.drawable.ic_notify)
-                .resize(200, 200)
-                .centerCrop()
                 .into(holder.ivFeatured, new com.squareup.picasso.Callback() {
                     @Override
                     public void onSuccess() {
