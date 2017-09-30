@@ -4,17 +4,22 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.RectF;
+import android.os.Build;
+import android.os.Handler;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.SpannableString;
 import android.text.Spanned;
+import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.ReplacementSpan;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.PopupWindow;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.academy.ndvalkov.mediamonitoringapp.R;
 import com.academy.ndvalkov.mediamonitoringapp.models.Article;
@@ -87,23 +92,8 @@ public class WorkspaceRVAdapter extends
         Context context = holder.tvDescription.getContext();
 
         if (isProcessed) {
-            String title = article.getTitle();
-            SpannableString sTitle = new SpannableString(title);
-            for (String word: primaryKeywords) {
-                String lower = word.toLowerCase();
-                String upperFirst = capitalizeFirstLetter(lower);
-
-                decorateSpannableKeyword(sTitle, lower, context);
-                decorateSpannableKeyword(sTitle, upperFirst, context);
-            }
-
-            holder.tvTitle.setMovementMethod(LinkMovementMethod.getInstance());
-            holder.tvTitle.setText(sTitle);
-
-
-
-
-
+            decorateTitleView(holder, article, context);
+            decorateDescriptionView(holder, article, context);
         } else {
             holder.tvTitle.setText(article.getTitle());
             holder.tvDescription.setText(article.getDescription());
@@ -122,28 +112,113 @@ public class WorkspaceRVAdapter extends
         return new MyViewHolder(v);
     }
 
-    private SpannableString decorateSpannableKeyword(SpannableString target, final String keyword, final Context context) {
+    private SpannableString decorateSpannableKeyword(final SpannableString target,
+                                                     final String keyword,
+                                                     final Context context,
+                                                     final int color) {
         String str = target.toString();
         int index = str.indexOf(keyword);
-        while(index >= 0) {
+        final int closureIndex = index;
+        while (index >= 0) {
             ClickableSpan clickableSpan = new ClickableSpan() {
                 @Override
                 public void onClick(View textView) {
-                    Toast.makeText(context, keyword, Toast.LENGTH_SHORT).show();
+                    showSkipPopup(textView, context, keyword);
+                    target.setSpan(new RoundedBackgroundSpan(context,
+                                    ContextCompat.getColor(context, R.color.red)),
+                            closureIndex,
+                            closureIndex + keyword.length(),
+                            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    ((TextView)textView).setText(target);
+                }
+
+                @Override
+                public void updateDrawState(TextPaint ds) {
+                    super.updateDrawState(ds);
                 }
             };
 
-
             target.setSpan(clickableSpan, index, index + keyword.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            target.setSpan(new RoundedBackgroundSpan(context), index, index + keyword.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            target.setSpan(new RoundedBackgroundSpan(context, color),
+                    index,
+                    index + keyword.length(),
+                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             index = str.indexOf(keyword, index + 1);
         }
 
         return target;
     }
 
+    private void showSkipPopup(View parent, Context context, String keyword) {
+        final PopupWindow popupWindow = new PopupWindow(context);
+        popupWindow.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
+        popupWindow.setWidth(ViewGroup.LayoutParams.WRAP_CONTENT);
+        LayoutInflater inflater = (LayoutInflater) context
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View popupContent = inflater.inflate(R.layout.popup, null);
+
+        TextView tvSkipped = (TextView)popupContent.findViewById(R.id.tvSkipped);
+        tvSkipped.setText(String.format("Keyword \"%s\" skipped", keyword));
+
+        popupWindow.setContentView(popupContent);
+        popupWindow.setOutsideTouchable(true);
+        popupWindow.setBackgroundDrawable(ContextCompat.getDrawable(context,
+                android.R.drawable.checkbox_off_background));
+        popupWindow.setAnimationStyle(android.R.style.Animation_Translucent);
+        if (Build.VERSION.SDK_INT >= 21) {
+            popupWindow.setElevation(5.0f);
+        }
+
+        popupWindow.showAtLocation(parent, Gravity.CENTER, 0, 0);
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                popupWindow.dismiss();
+            }
+        }, 1000);
+    }
+
+    private void decorateDescriptionView(MyViewHolder holder, Article article, Context context) {
+        String description = article.getDescription();
+        SpannableString sDescription = new SpannableString(description);
+        decoratePrimary(context, sDescription);
+        decorateSecondary(context, sDescription);
+        holder.tvDescription.setMovementMethod(LinkMovementMethod.getInstance());
+        holder.tvDescription.setText(sDescription);
+    }
+
+    private void decorateTitleView(MyViewHolder holder, Article article, Context context) {
+        String title = article.getTitle();
+        SpannableString sTitle = new SpannableString(title);
+        decoratePrimary(context, sTitle);
+        decorateSecondary(context, sTitle);
+        holder.tvTitle.setMovementMethod(LinkMovementMethod.getInstance());
+        holder.tvTitle.setText(sTitle);
+    }
+
+    private void decoratePrimary(Context context, SpannableString target) {
+        for (String word : primaryKeywords) {
+            String lower = word.toLowerCase();
+            String upperFirst = capitalizeFirstLetter(lower);
+
+            decorateSpannableKeyword(target, lower, context, ContextCompat.getColor(context, R.color.orange));
+            decorateSpannableKeyword(target, upperFirst, context, ContextCompat.getColor(context, R.color.orange));
+        }
+    }
+
+    private void decorateSecondary(Context context, SpannableString target) {
+        for (String word : secondaryKeywords) {
+            String lower = word.toLowerCase();
+            String upperFirst = capitalizeFirstLetter(lower);
+
+            decorateSpannableKeyword(target, lower, context, ContextCompat.getColor(context, R.color.green));
+            decorateSpannableKeyword(target, upperFirst, context, ContextCompat.getColor(context, R.color.green));
+        }
+    }
+
     private String capitalizeFirstLetter(String str) {
-        return str.substring(0,1).toUpperCase() + str.substring(1).toLowerCase();
+        return str.substring(0, 1).toUpperCase() + str.substring(1).toLowerCase();
     }
 
     public static class RoundedBackgroundSpan extends ReplacementSpan {
@@ -152,10 +227,10 @@ public class WorkspaceRVAdapter extends
         private int backgroundColor = 0;
         private int textColor = 0;
 
-        public RoundedBackgroundSpan(Context context) {
+        public RoundedBackgroundSpan(Context context, int backgroundColor) {
             super();
-            backgroundColor = context.getResources().getColor(R.color.orange);
-            textColor = context.getResources().getColor(R.color.white);
+            this.backgroundColor = backgroundColor;
+            this.textColor = context.getResources().getColor(R.color.white);
         }
 
         @Override

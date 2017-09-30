@@ -11,10 +11,10 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -40,6 +40,7 @@ import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 import fr.castorflex.android.circularprogressbar.CircularProgressBar;
@@ -137,7 +138,6 @@ public class WorkspaceFragment extends Fragment {
     }
 
 
-
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -209,8 +209,10 @@ public class WorkspaceFragment extends Fragment {
             public void onItemChosen(View labelledSpinner, AdapterView<?> adapterView, View itemView, int position, long id) {
                 MonitoringConfig mc = mConfigs.get(position);
                 tvSource.setText(mc.getSource());
-                tvPrimary.setText(mc.getPrimaryKeywords());
-                tvSecondary.setText(mc.getSecondaryKeywords());
+                String prims = "Primary: " + mc.getPrimaryKeywords();
+                tvPrimary.setText(prims);
+                String secs = "Secondary: " + mc.getSecondaryKeywords();
+                tvSecondary.setText(secs);
             }
 
             @Override
@@ -234,7 +236,6 @@ public class WorkspaceFragment extends Fragment {
         dlg.findViewById(R.id.cancelButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 dlg.dismiss();
             }
         });
@@ -247,13 +248,27 @@ public class WorkspaceFragment extends Fragment {
 
                 TextView tvSource = (TextView) mSheet.findViewById(R.id.tvSource);
                 TextView tvVendor = (TextView) mSheet.findViewById(R.id.tvVendor);
-                tvSource.setText(mConfigs.get(vendorIndex).getSource());
+
+                MonitoringConfig selectedConfig = mConfigs.get(vendorIndex);
+
+                tvSource.setText(selectedConfig.getSource());
                 tvVendor.setText(vendorName);
 
-                getArticles(mConfigs.get(vendorIndex).getSourceId());
+                addKeywordsToAdapter(selectedConfig);
+                getArticles(selectedConfig.getSourceId());
+
                 dlg.dismiss();
             }
         });
+    }
+
+    private void addKeywordsToAdapter(MonitoringConfig selectedConfig) {
+        String[] primList = TextUtils.split(selectedConfig.getPrimaryKeywords(), " ");
+        String[] secList = TextUtils.split(selectedConfig.getSecondaryKeywords(), " ");
+
+        WorkspaceRVAdapter workspaceAdapter = (WorkspaceRVAdapter) mAdapter;
+        workspaceAdapter.setPrimaryKeywords(new HashSet<>(Arrays.asList(primList)));
+        workspaceAdapter.setSecondaryKeywords(new HashSet<>(Arrays.asList(secList)));
     }
 
     private void getArticles(String sourceId) {
@@ -288,8 +303,9 @@ public class WorkspaceFragment extends Fragment {
     }
 
     private void processArticles() {
-        final WorkspaceRVAdapter workspaceAdapter = (WorkspaceRVAdapter)mAdapter;
-        workspaceAdapter.getPrimaryKeywords().add("paying");
+        final WorkspaceRVAdapter workspaceAdapter = (WorkspaceRVAdapter) mAdapter;
+        // Collections.addAll(workspaceAdapter.getPrimaryKeywords(), "Syria", "Korea", "Iraq");
+        // Collections.addAll(workspaceAdapter.getSecondaryKeywords(), "children", "threat", "woman", "war");
 
         // force redraw of all
         List<Article> newArticleList = new ArrayList<>(mArticles);
@@ -298,12 +314,12 @@ public class WorkspaceFragment extends Fragment {
         workspaceAdapter.setProcessed(true);
         workspaceAdapter.notifyDataSetChanged();
 
-        mRecyclerView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                workspaceAdapter.setProcessed(false);
-            }
-        });
+//        mRecyclerView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+//            @Override
+//            public void onGlobalLayout() {
+//                workspaceAdapter.setProcessed(false);
+//            }
+//        });
     }
 
     private class VerticalSpacingDecoration extends RecyclerView.ItemDecoration {
