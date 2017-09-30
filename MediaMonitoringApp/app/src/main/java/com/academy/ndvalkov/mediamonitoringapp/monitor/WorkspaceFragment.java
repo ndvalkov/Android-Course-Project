@@ -14,7 +14,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -59,10 +61,8 @@ public class WorkspaceFragment extends Fragment {
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private FloatingActionButton mFabProcess;
-    private boolean mIsProcessHidden;
-    private LinearLayout mContainerProcess;
-    private View overlay;
-    private CardView sheet;
+    private CardView mSheet;
+    private Button mBtnProcess;
 
     public WorkspaceFragment() {
         // Required empty public constructor
@@ -89,15 +89,15 @@ public class WorkspaceFragment extends Fragment {
         mRecyclerView = (RecyclerView) view.findViewById(R.id.rvArticles);
         mContainerArticles = (RelativeLayout) view.findViewById(R.id.container_articles);
         mProgress = (CircularProgressBar) view.findViewById(R.id.progress);
-        // mContainerProcess = (LinearLayout) view.findViewById(R.id.container_process);
         mFabProcess = (FloatingActionButton) view.findViewById(R.id.fabProcess);
-        sheet = (CardView) view.findViewById(R.id.sheet);
+        mSheet = (CardView) view.findViewById(R.id.sheet);
+        mBtnProcess = (Button) mSheet.findViewById(R.id.btnProcess);
 
-        sheet.setOnClickListener(new View.OnClickListener() {
+        mSheet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (mFabProcess.getVisibility() != View.VISIBLE) {
-                    FabTransformation.with(mFabProcess).transformFrom(sheet);
+                    FabTransformation.with(mFabProcess).transformFrom(mSheet);
                 }
             }
         });
@@ -106,25 +106,17 @@ public class WorkspaceFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (mFabProcess.getVisibility() == View.VISIBLE) {
-                    FabTransformation.with(mFabProcess).transformTo(sheet);
+                    FabTransformation.with(mFabProcess).transformTo(mSheet);
                 }
             }
         });
-//        mFabProcess.bringToFront();
-//        mFabProcess.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if (mIsProcessHidden) {
-//                    FabTransformation.with(mFabProcess)
-//                            .transformTo(mContainerProcess);
-//                    mIsProcessHidden = false;
-//                } else {
-//                    FabTransformation.with(mFabProcess)
-//                            .transformFrom(mContainerProcess);
-//                    mIsProcessHidden = true;
-//                }
-//            }
-//        });
+
+        mBtnProcess.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                processArticles();
+            }
+        });
 
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
@@ -143,6 +135,8 @@ public class WorkspaceFragment extends Fragment {
 
         return view;
     }
+
+
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -197,8 +191,10 @@ public class WorkspaceFragment extends Fragment {
 
         MonitoringConfig mc = mConfigs.get(0);
         tvSource.setText(mc.getSource());
-        tvPrimary.setText(mc.getPrimaryKeywords());
-        tvSecondary.setText(mc.getSecondaryKeywords());
+        String prims = "Primary: " + mc.getPrimaryKeywords();
+        tvPrimary.setText(prims);
+        String secs = "Secondary: " + mc.getSecondaryKeywords();
+        tvSecondary.setText(secs);
 
         mVendors = ListUtils.map(configs, new ListUtils.Map<MonitoringConfig, String>() {
             @Override
@@ -238,6 +234,7 @@ public class WorkspaceFragment extends Fragment {
         dlg.findViewById(R.id.cancelButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 dlg.dismiss();
             }
         });
@@ -247,6 +244,12 @@ public class WorkspaceFragment extends Fragment {
             public void onClick(View v) {
                 String vendorName = spinner.getSpinner().getSelectedItem().toString();
                 int vendorIndex = mVendors.indexOf(vendorName);
+
+                TextView tvSource = (TextView) mSheet.findViewById(R.id.tvSource);
+                TextView tvVendor = (TextView) mSheet.findViewById(R.id.tvVendor);
+                tvSource.setText(mConfigs.get(vendorIndex).getSource());
+                tvVendor.setText(vendorName);
+
                 getArticles(mConfigs.get(vendorIndex).getSourceId());
                 dlg.dismiss();
             }
@@ -280,6 +283,25 @@ public class WorkspaceFragment extends Fragment {
                         }
                     }
                 });
+            }
+        });
+    }
+
+    private void processArticles() {
+        final WorkspaceRVAdapter workspaceAdapter = (WorkspaceRVAdapter)mAdapter;
+        workspaceAdapter.getPrimaryKeywords().add("paying");
+
+        // force redraw of all
+        List<Article> newArticleList = new ArrayList<>(mArticles);
+        mArticles.clear();
+        mArticles.addAll(newArticleList);
+        workspaceAdapter.setProcessed(true);
+        workspaceAdapter.notifyDataSetChanged();
+
+        mRecyclerView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                workspaceAdapter.setProcessed(false);
             }
         });
     }
