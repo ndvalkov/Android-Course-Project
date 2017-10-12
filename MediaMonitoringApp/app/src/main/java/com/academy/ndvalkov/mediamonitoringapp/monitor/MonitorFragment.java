@@ -13,6 +13,9 @@ import android.view.ViewGroup;
 import com.academy.ndvalkov.mediamonitoringapp.R;
 import com.academy.ndvalkov.mediamonitoringapp.common.BusProvider;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class MonitorFragment extends Fragment {
 
     private static final String TAG = MonitorFragment.class.getSimpleName();
@@ -84,9 +87,15 @@ public class MonitorFragment extends Fragment {
 //                                        .commit();
                                 break;
                             case R.id.action_results:
+                                Map<String, HashMap<String,Integer>> primResult = new HashMap<>();
+                                Map<String, HashMap<String,Integer>> secResult = new HashMap<>();
                                 if (mWorkspaceFragment != null) {
                                     transaction.hide(mWorkspaceFragment);
+                                    WorkspaceFragment wf = (WorkspaceFragment)mWorkspaceFragment;
+                                    primResult = wf.getPrimaryResults();
+                                    secResult = wf.getSecondaryResults();
                                 }
+
 
                                 if (mResultsFragment == null) {
                                     mResultsFragment = new ResultsFragment();
@@ -94,6 +103,10 @@ public class MonitorFragment extends Fragment {
                                 } else {
                                     transaction.show(mResultsFragment);
                                 }
+
+                                ResultsFragment rf = (ResultsFragment)mResultsFragment;
+                                rf.setPrimaryResults(primResult);
+                                rf.setSecondaryResults(secResult);
 
                                 transaction.commit();
 

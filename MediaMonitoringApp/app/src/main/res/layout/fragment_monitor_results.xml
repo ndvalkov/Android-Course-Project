@@ -6,8 +6,17 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Resluts"
-        android:layout_centerInParent="true"
+        android:text="@string/monitor_tv_results"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
         android:background="@drawable/shape_label_rounded"/>
+
+    <TableLayout
+        android:id="@+id/tlResults"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="@dimen/spacing_normal"
+        android:stretchColumns="*" />
 
 </RelativeLayout>
