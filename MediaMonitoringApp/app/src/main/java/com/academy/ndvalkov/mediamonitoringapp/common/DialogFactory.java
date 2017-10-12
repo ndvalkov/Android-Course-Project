@@ -1,26 +1,5 @@
 package com.academy.ndvalkov.mediamonitoringapp.common;
 
-/**
- * Utility class for the creation of different types of Dialogs.
- * Sample usage --> (apply Otto annotations to pass data between the Dialog and Activity/worker threads):
- * -> {@code
- * DialogFactory.DialogParams dlgParams = new DialogFactory.DialogParams();
- * dlgParams.setTitle("Information")
- * .setIcon(getResources().getDrawable(R.drawable.fire_smoke))
- * .setContent("Some content")
- * .setIgnoreButton(true)
- * .setCancelButton(true);
- * final Dialog dlg = DialogFactory.getInstance(this).createDialog(dlgParams);
- * dlg.findViewById(R.id.okButton).setOnClickListener(new View.OnClickListener() {
- *
- * @Override
- * public void onClick(View v) {
- * dlg.dismiss();
- * }
- * });
- * } <-
- */
-
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.drawable.Drawable;

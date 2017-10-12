@@ -40,8 +40,10 @@ import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 
 import fr.castorflex.android.circularprogressbar.CircularProgressBar;
 
@@ -64,6 +66,14 @@ public class WorkspaceFragment extends Fragment {
     private FloatingActionButton mFabProcess;
     private CardView mSheet;
     private Button mBtnProcess;
+
+    public Map<String, HashMap<String,Integer>> getPrimaryResults() {
+        return ((WorkspaceRVAdapter)mAdapter).getPrimaryResults();
+    }
+
+    public Map<String, HashMap<String,Integer>> getSecondaryResults() {
+        return ((WorkspaceRVAdapter)mAdapter).getSecondaryResults();
+    }
 
     public WorkspaceFragment() {
         // Required empty public constructor
@@ -307,17 +317,39 @@ public class WorkspaceFragment extends Fragment {
         // Collections.addAll(workspaceAdapter.getPrimaryKeywords(), "Syria", "Korea", "Iraq");
         // Collections.addAll(workspaceAdapter.getSecondaryKeywords(), "children", "threat", "woman", "war");
 
+//        workspaceAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+//            @Override
+//            public void onChanged() {
+//                super.onChanged();
+//                Toast.makeText(getActivity(), "ss", Toast.LENGTH_SHORT).show();
+//               workspaceAdapter.setProcessed(false);
+//               workspaceAdapter.clearResults();
+//            }
+//        });
+
         // force redraw of all
         List<Article> newArticleList = new ArrayList<>(mArticles);
         mArticles.clear();
         mArticles.addAll(newArticleList);
-        workspaceAdapter.setProcessed(true);
+
+        workspaceAdapter.clearResults();
+        workspaceAdapter.startProcessing();
         workspaceAdapter.notifyDataSetChanged();
 
+        mRecyclerView.smoothScrollToPosition(workspaceAdapter.getItemCount() - 1);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Notifications.showPositive(getActivity(), getResources().getString(R.string.msg_processing));
+            }
+        }, 500);
+        // Log.d(TAG, "Processed");
 //        mRecyclerView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
 //            @Override
 //            public void onGlobalLayout() {
+//                Toast.makeText(getActivity(), "ss", Toast.LENGTH_SHORT).show();
 //                workspaceAdapter.setProcessed(false);
+//                workspaceAdapter.clearResults();
 //            }
 //        });
     }

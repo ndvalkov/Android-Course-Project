@@ -12,13 +12,10 @@ import android.view.ViewGroup;
 
 import com.academy.ndvalkov.mediamonitoringapp.R;
 import com.academy.ndvalkov.mediamonitoringapp.common.BusProvider;
-import com.academy.ndvalkov.mediamonitoringapp.data.db.DbProvider;
 
 public class MonitorFragment extends Fragment {
 
     private static final String TAG = MonitorFragment.class.getSimpleName();
-
-    private final DbProvider mDbProvider;
 
     private BottomNavigationView mBottomNavigationView;
     private Fragment mWorkspaceFragment;
@@ -26,9 +23,6 @@ public class MonitorFragment extends Fragment {
 
     public MonitorFragment() {
         // Required empty public constructor
-
-        // DI
-        mDbProvider = DbProvider.getInstance();
     }
 
     @Override

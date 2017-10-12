@@ -53,6 +53,9 @@
     <string name="monitor_btn_process">Process</string>
     <string name="monitor_tv_primary">Primary</string>
     <string name="monitor_tv_secondary">Secondary</string>
+    <string name="monitor_rb_positive">Positive</string>
+    <string name="monitor_rb_negative">Negative</string>
+    <string name="monitor_rb_neutral">Neutral</string>
 
     <!--Nav drawer-->
     <string name="navigation.action.open">Open navigation drawer</string>
@@ -69,6 +72,7 @@
     <string name="msg_select_category">Please, select category</string>
     <string name="msg_add_vendor">Please, add vendor name</string>
     <string name="msg_config_saved">Configuration saved successfully!</string>
+    <string name="msg_processing">Articles processed successfully!</string>
 
     <!--Models-->
     <string name="md_source_name">Name</string>

@@ -8,19 +8,13 @@ import android.view.ViewGroup;
 
 import com.academy.ndvalkov.mediamonitoringapp.R;
 import com.academy.ndvalkov.mediamonitoringapp.common.BusProvider;
-import com.academy.ndvalkov.mediamonitoringapp.data.db.DbProvider;
 
 public class ResultsFragment extends Fragment {
 
     private static final String TAG = ResultsFragment.class.getSimpleName();
 
-    private final DbProvider mDbProvider;
-
     public ResultsFragment() {
         // Required empty public constructor
-
-        // DI
-        mDbProvider = DbProvider.getInstance();
     }
 
     @Override

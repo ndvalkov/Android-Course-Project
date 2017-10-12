@@ -14,6 +14,7 @@ import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.ReplacementSpan;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,8 +25,10 @@ import android.widget.TextView;
 import com.academy.ndvalkov.mediamonitoringapp.R;
 import com.academy.ndvalkov.mediamonitoringapp.models.Article;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public class WorkspaceRVAdapter extends
@@ -34,7 +37,10 @@ public class WorkspaceRVAdapter extends
     private List<Article> articlesList;
     private Set<String> primaryKeywords = new HashSet<>();
     private Set<String> secondaryKeywords = new HashSet<>();
+    private Map<String, HashMap<String, Integer>> primaryResults = new HashMap<>();
+    private Map<String, HashMap<String, Integer>> secondaryResults = new HashMap<>();
     private boolean isProcessed;
+    private boolean isDecorated;
 
     public List<Article> getArticlesList() {
         return articlesList;
@@ -60,12 +66,26 @@ public class WorkspaceRVAdapter extends
         this.secondaryKeywords = secondaryKeywords;
     }
 
+    public Map<String, HashMap<String, Integer>> getPrimaryResults() {
+        return new HashMap<>(primaryResults);
+    }
+
+    public Map<String, HashMap<String, Integer>> getSecondaryResults() {
+        return new HashMap<>(secondaryResults);
+    }
+
     public boolean isProcessed() {
         return isProcessed;
     }
 
-    public void setProcessed(boolean processed) {
-        isProcessed = processed;
+    public void startProcessing() {
+        isProcessed = false;
+        isDecorated = true;
+    }
+
+    public void clearResults() {
+        primaryResults.clear();
+        secondaryResults.clear();
     }
 
     /**
@@ -91,13 +111,19 @@ public class WorkspaceRVAdapter extends
         final Article article = articlesList.get(position);
         Context context = holder.tvDescription.getContext();
 
-        if (isProcessed) {
+        if (isDecorated) {
             decorateTitleView(holder, article, context);
             decorateDescriptionView(holder, article, context);
         } else {
             holder.tvTitle.setText(article.getTitle());
             holder.tvDescription.setText(article.getDescription());
         }
+
+        if (position == this.articlesList.size() - 1) {
+            isProcessed = true;
+        }
+
+        Log.d("RV", "Processed");
     }
 
     @Override
@@ -112,41 +138,100 @@ public class WorkspaceRVAdapter extends
         return new MyViewHolder(v);
     }
 
-    private SpannableString decorateSpannableKeyword(final SpannableString target,
-                                                     final String keyword,
-                                                     final Context context,
-                                                     final int color) {
+    private SpannableString processKeyword(final SpannableString target,
+                                           final String keyword,
+                                           final Context context,
+                                           final int color,
+                                           String title,
+                                           boolean isPrimary) {
         String str = target.toString();
         int index = str.indexOf(keyword);
         final int closureIndex = index;
         while (index >= 0) {
-            ClickableSpan clickableSpan = new ClickableSpan() {
-                @Override
-                public void onClick(View textView) {
-                    showSkipPopup(textView, context, keyword);
-                    target.setSpan(new RoundedBackgroundSpan(context,
-                                    ContextCompat.getColor(context, R.color.red)),
-                            closureIndex,
-                            closureIndex + keyword.length(),
-                            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                    ((TextView)textView).setText(target);
-                }
-
-                @Override
-                public void updateDrawState(TextPaint ds) {
-                    super.updateDrawState(ds);
-                }
-            };
-
-            target.setSpan(clickableSpan, index, index + keyword.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            target.setSpan(new RoundedBackgroundSpan(context, color),
+            decorateSpannableWordAtPosition(target,
+                    keyword,
+                    context,
+                    color,
                     index,
-                    index + keyword.length(),
-                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    closureIndex,
+                    title,
+                    isPrimary);
+            generateResults(title, keyword, isPrimary);
             index = str.indexOf(keyword, index + 1);
         }
 
         return target;
+    }
+
+    private void generateResults(String title, String keyword, boolean isPrimary) {
+        if (!isProcessed) {
+            if (isPrimary) {
+                addToResultMap(title, keyword, primaryResults);
+            } else {
+                addToResultMap(title, keyword, secondaryResults);
+            }
+        }
+    }
+
+    private void addToResultMap(String title, String keyword, Map<String, HashMap<String, Integer>> resultMap) {
+        if (!resultMap.containsKey(title)) {
+            resultMap.put(title, new HashMap<String, Integer>());
+        }
+
+        HashMap<String, Integer> keywordOccurrences = resultMap.get(title);
+        String keyToLower = keyword.toLowerCase();
+        if (!keywordOccurrences.containsKey(keyToLower)) {
+            keywordOccurrences.put(keyToLower, 1);
+        } else {
+            keywordOccurrences.put(keyToLower, keywordOccurrences.get(keyToLower) + 1);
+        }
+    }
+
+    private void updateResultMap(String title, String keyword, Map<String, HashMap<String, Integer>> resultMap) {
+        int occurrences = resultMap.get(title).get(keyword.toLowerCase());
+        resultMap.get(title).put(keyword.toLowerCase(), --occurrences);
+    }
+
+    private void decorateSpannableWordAtPosition(final SpannableString target,
+                                                 final String keyword,
+                                                 final Context context,
+                                                 int color,
+                                                 int index,
+                                                 final int closureIndex,
+                                                 final String title,
+                                                 final boolean isPrimary) {
+        final ClickableSpan clickableSpan = new ClickableSpan() {
+            @Override
+            public void onClick(View textView) {
+                if (isPrimary) {
+                    updateResultMap(title, keyword, primaryResults);
+                } else {
+                    updateResultMap(title, keyword, secondaryResults);
+                }
+
+                // keyword skipped, remove span
+                target.removeSpan(this);
+
+                showSkipPopup(textView, context, keyword);
+                target.setSpan(new RoundedBackgroundSpan(context,
+                                ContextCompat.getColor(context, R.color.red)),
+                        closureIndex,
+                        closureIndex + keyword.length(),
+                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                ((TextView) textView).setText(target);
+            }
+
+            @Override
+            public void updateDrawState(TextPaint ds) {
+                super.updateDrawState(ds);
+            }
+        };
+
+        target.setSpan(clickableSpan, index, index + keyword.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        target.setSpan(new RoundedBackgroundSpan(context, color),
+                index,
+                index + keyword.length(),
+                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
     }
 
     private void showSkipPopup(View parent, Context context, String keyword) {
@@ -157,7 +242,7 @@ public class WorkspaceRVAdapter extends
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View popupContent = inflater.inflate(R.layout.popup, null);
 
-        TextView tvSkipped = (TextView)popupContent.findViewById(R.id.tvSkipped);
+        TextView tvSkipped = (TextView) popupContent.findViewById(R.id.tvSkipped);
         tvSkipped.setText(String.format("Keyword \"%s\" skipped", keyword));
 
         popupWindow.setContentView(popupContent);
@@ -182,38 +267,46 @@ public class WorkspaceRVAdapter extends
     private void decorateDescriptionView(MyViewHolder holder, Article article, Context context) {
         String description = article.getDescription();
         SpannableString sDescription = new SpannableString(description);
-        decoratePrimary(context, sDescription);
-        decorateSecondary(context, sDescription);
+
+        processPrimary(context, sDescription, article.getTitle());
+        processSecondary(context, sDescription, article.getTitle());
+
         holder.tvDescription.setMovementMethod(LinkMovementMethod.getInstance());
         holder.tvDescription.setText(sDescription);
     }
 
     private void decorateTitleView(MyViewHolder holder, Article article, Context context) {
         String title = article.getTitle();
-        SpannableString sTitle = new SpannableString(title);
-        decoratePrimary(context, sTitle);
-        decorateSecondary(context, sTitle);
+        SpannableString spanTitle = new SpannableString(title);
+
+        processPrimary(context, spanTitle, title);
+        processSecondary(context, spanTitle, title);
+
         holder.tvTitle.setMovementMethod(LinkMovementMethod.getInstance());
-        holder.tvTitle.setText(sTitle);
+        holder.tvTitle.setText(spanTitle);
     }
 
-    private void decoratePrimary(Context context, SpannableString target) {
+    private void processPrimary(Context context, SpannableString target, String title) {
         for (String word : primaryKeywords) {
             String lower = word.toLowerCase();
             String upperFirst = capitalizeFirstLetter(lower);
 
-            decorateSpannableKeyword(target, lower, context, ContextCompat.getColor(context, R.color.orange));
-            decorateSpannableKeyword(target, upperFirst, context, ContextCompat.getColor(context, R.color.orange));
+            processKeyword(target, lower, context, ContextCompat.getColor(context, R.color.orange),
+                    title, true);
+            processKeyword(target, upperFirst, context, ContextCompat.getColor(context, R.color.orange),
+                    title, true);
         }
     }
 
-    private void decorateSecondary(Context context, SpannableString target) {
+    private void processSecondary(Context context, SpannableString target, String title) {
         for (String word : secondaryKeywords) {
             String lower = word.toLowerCase();
             String upperFirst = capitalizeFirstLetter(lower);
 
-            decorateSpannableKeyword(target, lower, context, ContextCompat.getColor(context, R.color.green));
-            decorateSpannableKeyword(target, upperFirst, context, ContextCompat.getColor(context, R.color.green));
+            processKeyword(target, lower, context, ContextCompat.getColor(context, R.color.green),
+                    title, false);
+            processKeyword(target, upperFirst, context, ContextCompat.getColor(context, R.color.green),
+                    title, false);
         }
     }
 
