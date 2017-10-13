@@ -4,19 +4,22 @@
     android:layout_height="match_parent">
 
     <TextView
+        android:id="@+id/tvReport"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/monitor_tv_results"
-        android:layout_alignParentEnd="true"
         android:layout_alignParentTop="true"
-        android:background="@drawable/shape_label_rounded"/>
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/shape_label_rounded"
+        android:text="@string/monitor_tv_report" />
 
     <TableLayout
         android:id="@+id/tlResults"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_below="@id/tvReport"
         android:layout_gravity="center"
         android:layout_margin="@dimen/spacing_normal"
-        android:stretchColumns="*" />
+        android:shrinkColumns="0"
+        android:stretchColumns="0" />
 
 </RelativeLayout>

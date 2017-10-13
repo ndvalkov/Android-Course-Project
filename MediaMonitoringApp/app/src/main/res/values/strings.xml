@@ -57,6 +57,7 @@
     <string name="monitor_rb_negative">Negative</string>
     <string name="monitor_rb_neutral">Neutral</string>
     <string name="monitor_tv_results">Results</string>
+    <string name="monitor_tv_report">Monitoring Report</string>
 
     <!--Nav drawer-->
     <string name="navigation.action.open">Open navigation drawer</string>
