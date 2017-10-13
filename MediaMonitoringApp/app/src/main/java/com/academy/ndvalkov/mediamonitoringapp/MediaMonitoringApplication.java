@@ -1,6 +1,5 @@
 package com.academy.ndvalkov.mediamonitoringapp;
 
-
 import android.app.Application;
 
 import com.orm.SugarContext;
